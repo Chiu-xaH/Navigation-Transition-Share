@@ -3,6 +3,7 @@ package com.xah.sample.ui.util
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.xah.sample.ui.style.TransitionState
 
 fun NavController.navigateAndClear(route: String) {
     navigate(route) {
@@ -21,6 +22,10 @@ fun NavController.navigateAndSave(route: String) {
     }
 }
 
+fun NavController.navigateAndSaveForTransition(route: String, transplantBackground : Boolean = false) {
+    TransitionState.transplantBackground = transplantBackground
+    navigateAndSave(route)
+}
 
 @Composable
 fun NavController.currentRoute() : String? = this.currentBackStackEntryAsState().value?.destination?.route

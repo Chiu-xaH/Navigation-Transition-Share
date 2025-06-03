@@ -1,11 +1,13 @@
 package com.xah.sample.ui.screen.detail
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,21 +44,26 @@ fun DetailScreen(
     route : String,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
+    boundsTransform: BoundsTransform,
     onBackPressed: () -> Unit
 ) {
     with(sharedTransitionScope) {
         CustomScaffold (
-            vm = vm,
+//            containerColor = MaterialTheme.colorScheme,
             showSurface = showSurface,
             modifier = Modifier
                 .fillMaxSize()
                 .sharedBounds(
-                    enter = fadeIn(tween(durationMillis = MyAnimationManager.ANIMATION_SPEED)),
-                    exit = fadeOut(tween(durationMillis = MyAnimationManager.ANIMATION_SPEED)),
+                    boundsTransform = boundsTransform,
+                    enter = MyAnimationManager.fadeAnimation.enter,
+                    exit = MyAnimationManager.fadeAnimation.exit,
                     sharedContentState = rememberSharedContentState(key = "container_$route"),
                     animatedVisibilityScope = animatedContentScope,
                     resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                ),
+                )
+                .clickable {
+                    onBackPressed()
+                },
             topBar = {
                 TopAppBar(
                     navigationIcon = {
@@ -66,6 +73,7 @@ fun DetailScreen(
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.sharedElement(
+                                    boundsTransform = boundsTransform,
                                     sharedContentState = rememberSharedContentState(key = "title_$route"),
                                     animatedVisibilityScope = animatedContentScope,
                                 )

@@ -1,6 +1,8 @@
 package com.xah.sample.ui.style
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -56,29 +58,35 @@ fun appBlur(
         }
 }
 
+object TransitionState {
+    var transplantBackground = false
+}
 
 // isExpanded=true时，下层背景进入高斯模糊，并用黑色压暗，伴随缩放，上层背景展开
 @Composable
 fun transitionBackground(isExpanded : Boolean,vm : UIViewModel) : Modifier {
     val motionBlur = vm.motionBlur
     val transition = vm.forceAnimation
+    val transplantBackground = TransitionState.transplantBackground
     // 稍微晚于运动结束
     val blurSize by animateDpAsState(
         targetValue = if (isExpanded && motionBlur) 12.dp else 0.dp, label = ""
-        ,animationSpec = tween(ANIMATION_SPEED + 100, easing = LinearOutSlowInEasing),
+        ,animationSpec = tween(ANIMATION_SPEED + ANIMATION_SPEED/2, easing = FastOutSlowInEasing),
     )
     val scale = animateFloatAsState(
-        targetValue = if (isExpanded) 0.8f else 1f, // 按下时为0.9，松开时为1
-        animationSpec = tween(ANIMATION_SPEED + 100, easing = LinearOutSlowInEasing)
+        targetValue = if (isExpanded) 0.875f else 1f,
+        animationSpec = tween(ANIMATION_SPEED+ ANIMATION_SPEED/2 , easing = FastOutSlowInEasing)
     )
     val backgroundColor by animateColorAsState(
-        targetValue = if(isExpanded) Color.Black.copy(.3f) else Color.Transparent,
-        animationSpec = tween(ANIMATION_SPEED, easing = LinearOutSlowInEasing)
+        targetValue = if(isExpanded) Color.Black.copy(.4f) else Color.Transparent,
+        animationSpec = tween(ANIMATION_SPEED, easing = FastOutSlowInEasing)
     )
+    // LinearOutSlowInEasing F
     // 蒙版
-    if(transition)
+    if(!(transplantBackground && !transition))
         Box(modifier = Modifier.fillMaxSize().background(backgroundColor).zIndex(2f))
 
-    val transitionModifier = if(transition) Modifier.blur(blurSize).scale(scale.value) else Modifier
+    val transitionModifier = if(transition) Modifier.scale(scale.value).blur(blurSize) else Modifier
+
     return transitionModifier
 }

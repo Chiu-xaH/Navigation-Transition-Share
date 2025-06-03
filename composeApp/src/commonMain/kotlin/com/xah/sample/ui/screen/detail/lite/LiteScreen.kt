@@ -1,4 +1,4 @@
-package com.xah.sample.ui.screen.detail.pure
+package com.xah.sample.ui.screen.detail.lite
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -26,7 +26,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PureScreen(index : Int) {
+fun LiteScreen(index : Int) {
     var showBottomSheet by remember { mutableStateOf(false) }
 
     TransplantListItem(

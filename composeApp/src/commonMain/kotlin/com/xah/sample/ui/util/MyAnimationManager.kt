@@ -1,9 +1,14 @@
 package com.xah.sample.ui.util
 
+import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.Spring.StiffnessMediumLow
+import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -12,17 +17,36 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.TransformOrigin
 
 object MyAnimationManager {
     data class TransferAnimation(val remark : String,val enter : EnterTransition, val exit : ExitTransition)
 
-    const val ANIMATION_SPEED = 400
+    var ANIMATION_SPEED = 400
+
+    const val DEFAULT_ANIMATION_SPEED = 400
+
+    @OptIn(ExperimentalSharedTransitionApi::class)
+    val defaultBoundsTransform = BoundsTransform { _, _ ->//StiffnessMediumLow
+        defaultSpring
+    }
+    val defaultSpring = spring(
+        dampingRatio = Spring.DampingRatioLowBouncy*1.1f,
+        stiffness = Spring.StiffnessLow,
+        visibilityThreshold = Rect.VisibilityThreshold
+    )
+    @OptIn(ExperimentalSharedTransitionApi::class)
+    val centerBoundsTransform = BoundsTransform { _, _ ->//FastOutSlowInEasing
+        tween(durationMillis = ANIMATION_SPEED, easing = LinearOutSlowInEasing)
+    }
 
     private val enterAnimation2 = scaleIn(animationSpec =  tween(durationMillis = ANIMATION_SPEED, easing = LinearOutSlowInEasing), initialScale = .8f) + fadeIn(animationSpec = tween(durationMillis = ANIMATION_SPEED/2))
 
     private val exitAnimation2 = scaleOut(animationSpec =  tween(durationMillis = ANIMATION_SPEED,easing = LinearOutSlowInEasing), targetScale = .8f) + fadeOut(animationSpec = tween(durationMillis = ANIMATION_SPEED/2))
 
     val centerAnimation = TransferAnimation("向中心运动",enterAnimation2, exitAnimation2)
+
 
     private val enterAnimation5 = scaleIn(animationSpec =  tween(durationMillis = ANIMATION_SPEED, easing = LinearOutSlowInEasing))
 
