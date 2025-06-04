@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -85,7 +86,7 @@ fun IconSampleScreen(
         Column(modifier = Modifier.verticalScroll(scrollState)) {
             Spacer(Modifier.height(innerPadding.calculateTopPadding()).statusBarsPadding())
             DividerTextExpandedWith("无边框按钮",vm) {
-                RowHorizontal {
+                RowHorizontal(modifier = Modifier.fillMaxWidth()) {
                     with(sharedTransitionScope) {
                         val route = func2[0]
                         IconButton(
@@ -135,7 +136,7 @@ fun IconSampleScreen(
                 }
             }
             DividerTextExpandedWith("有边框按钮",vm) {
-                RowHorizontal {
+                RowHorizontal(modifier = Modifier.fillMaxWidth())  {
                     with(sharedTransitionScope) {
                         val route = func2[2]
                         OutlinedButton (
@@ -239,7 +240,7 @@ fun IconSampleScreen(
                 }
             }
             DividerTextExpandedWith("标签",vm) {
-                RowHorizontal {
+                RowHorizontal(modifier = Modifier.fillMaxWidth())  {
                     with(sharedTransitionScope) {
                         val route = func2[6]
                         FilterChip  (

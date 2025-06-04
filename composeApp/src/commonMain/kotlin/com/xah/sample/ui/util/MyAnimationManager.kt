@@ -38,7 +38,7 @@ object MyAnimationManager {
     )
     @OptIn(ExperimentalSharedTransitionApi::class)
     val centerBoundsTransform = BoundsTransform { _, _ ->//FastOutSlowInEasing
-        tween(durationMillis = ANIMATION_SPEED, easing = LinearOutSlowInEasing)
+        tween(durationMillis = ANIMATION_SPEED, easing = FastOutSlowInEasing)
     }
 
     private val enterAnimation2 = scaleIn(animationSpec =  tween(durationMillis = ANIMATION_SPEED, easing = LinearOutSlowInEasing), initialScale = .8f) + fadeIn(animationSpec = tween(durationMillis = ANIMATION_SPEED/2))

@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.xah.sample.logic.enumeration.Platform
+import com.xah.sample.logic.util.getPlatformType
 import com.xah.sample.ui.component.largeCardColor
 import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
 import com.xah.sample.viewmodel.UIViewModel
@@ -70,23 +72,25 @@ fun transitionBackground(isExpanded : Boolean,vm : UIViewModel) : Modifier {
     val transplantBackground = TransitionState.transplantBackground
     // 稍微晚于运动结束
     val blurSize by animateDpAsState(
-        targetValue = if (isExpanded && motionBlur) 12.dp else 0.dp, label = ""
+        targetValue = if (isExpanded && motionBlur) APP_BLUR_RADIUS else 0.dp, label = ""
         ,animationSpec = tween(ANIMATION_SPEED + ANIMATION_SPEED/2, easing = FastOutSlowInEasing),
     )
-    val scale = animateFloatAsState(
+    val scale = animateFloatAsState( //.875f
         targetValue = if (isExpanded) 0.875f else 1f,
         animationSpec = tween(ANIMATION_SPEED+ ANIMATION_SPEED/2 , easing = FastOutSlowInEasing)
     )
     val backgroundColor by animateColorAsState(
-        targetValue = if(isExpanded) Color.Black.copy(.4f) else Color.Transparent,
+        targetValue = if(isExpanded) Color.Black.copy(.5f) else Color.Transparent,
         animationSpec = tween(ANIMATION_SPEED, easing = FastOutSlowInEasing)
     )
-    // LinearOutSlowInEasing F
-    // 蒙版
+    // LinearOutSlowInEasing
+    // 蒙版 遮罩
     if(!(transplantBackground && !transition))
         Box(modifier = Modifier.fillMaxSize().background(backgroundColor).zIndex(2f))
+
 
     val transitionModifier = if(transition) Modifier.scale(scale.value).blur(blurSize) else Modifier
 
     return transitionModifier
+//    return transitionModifier.let { if (motionBlur) it.blur(blurSize) else it }
 }
