@@ -24,6 +24,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -41,6 +42,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.animation
 import animationsample.composeapp.generated.resources.blur_off
@@ -56,7 +59,9 @@ import com.xah.sample.ui.component.DividerTextExpandedWith
 import com.xah.sample.ui.component.TransplantListItem
 import com.xah.sample.ui.style.TransitionState
 import com.xah.sample.ui.style.topBarTransplantColor
+import com.xah.sample.ui.style.transitionBackground2
 import com.xah.sample.ui.util.MyAnimationManager
+import com.xah.sample.ui.util.navigateAndSaveForTransition
 import com.xah.sample.viewmodel.UIViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -65,7 +70,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun SettingsScreen(
     vm : UIViewModel,
-    showSurface : Boolean,
+//    showSurface : Boolean,
+    navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     boundsTransform: BoundsTransform,
@@ -86,8 +92,9 @@ fun SettingsScreen(
 
     with(sharedTransitionScope) {
         CustomScaffold(
-            showSurface = showSurface,
-            modifier = Modifier
+            showSurface = vm.showSurface,
+            modifier =
+                transitionBackground2(navController, ScreenRoute.SettingsScreen.route,vm)
                 .fillMaxSize()
                 .sharedBounds(
                     boundsTransform = boundsTransform,
@@ -211,6 +218,42 @@ fun SettingsScreen(
                         supportingContent = { Text("因和此页面某些组件测量冲突而关闭，需打开请自行修改清单文件")},
                         modifier = Modifier.clickable { }
                     )
+                }
+                DividerTextExpandedWith("三级界面",vm) {
+                    with(sharedTransitionScope) {
+
+                        val r = ScreenRoute.Module31Screen.route
+                        ListItem(
+                            modifier = Modifier
+                                .sharedBounds(
+                                    boundsTransform = boundsTransform,
+                                    enter = MyAnimationManager.fadeAnimation.enter,
+                                    exit = MyAnimationManager.fadeAnimation.exit,
+                                    sharedContentState = rememberSharedContentState(key = "container_$r"),
+                                    animatedVisibilityScope = animatedContentScope,
+                                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                                )
+                                .clickable {
+                                    navController.navigateAndSaveForTransition(r)
+                                },
+//                        colors = MaterialTheme.colorScheme.secondaryContainer,
+                            headlineContent = { Text(r) },
+                            leadingContent = {
+                                Icon(
+                                    painterResource(Res.drawable.deployed_code),
+                                    null,
+                                    modifier = Modifier.sharedElement(
+                                        boundsTransform = boundsTransform,
+                                        sharedContentState = rememberSharedContentState(key = "title_$r"),
+                                        animatedVisibilityScope = animatedContentScope,
+                                    )
+                                )
+                            },
+                            supportingContent = {
+                                Text("内容")
+                            }
+                        )
+                    }
                 }
             }
         }

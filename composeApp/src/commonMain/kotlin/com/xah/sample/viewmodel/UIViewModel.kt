@@ -10,6 +10,7 @@ import com.xah.sample.logic.util.SimpleDataStore
 import com.xah.sample.ui.util.MyAnimationManager
 
 class UIViewModel : ViewModel() {
+    var showSurface by mutableStateOf(false)
     var isExpandedScreen by mutableStateOf(false)
     var firstStart by mutableStateOf(true)
     var animationSpeed by mutableFloatStateOf(MyAnimationManager.DEFAULT_ANIMATION_SPEED.toFloat())

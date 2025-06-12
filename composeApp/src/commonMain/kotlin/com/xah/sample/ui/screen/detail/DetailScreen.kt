@@ -40,7 +40,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun DetailScreen(
     vm : UIViewModel,
-    showSurface : Boolean,
+//    showSurface : Boolean,
     route : String,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
@@ -50,7 +50,7 @@ fun DetailScreen(
     with(sharedTransitionScope) {
         CustomScaffold (
 //            containerColor = MaterialTheme.colorScheme,
-            showSurface = showSurface,
+            showSurface = vm.showSurface,
             modifier = Modifier
                 .fillMaxSize()
                 .sharedBounds(

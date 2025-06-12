@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,9 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.deployed_code
@@ -31,9 +34,13 @@ import com.xah.sample.ui.screen.home.screen.IconSampleScreen
 import com.xah.sample.ui.screen.home.screen.SingleColumnSampleScreen
 import com.xah.sample.ui.screen.home.screen.TwoColumnSampleScreen
 import com.xah.sample.ui.style.transitionBackground
+import com.xah.sample.ui.style.transitionBackground2
 import com.xah.sample.ui.util.MyAnimationManager
+import com.xah.sample.ui.util.allRouteStack
+import com.xah.sample.ui.util.currentRoute
 import com.xah.sample.ui.util.isCurrentRoute
 import com.xah.sample.ui.util.navigateAndSaveForTransition
+import com.xah.sample.ui.util.previousRoute
 import com.xah.sample.viewmodel.UIViewModel
 import org.jetbrains.compose.resources.painterResource
 
@@ -48,21 +55,33 @@ fun HomeScreen(
     boundsTransform: BoundsTransform,
     onItemClick: (String) -> Unit,
 ) {
-    if(vm.firstStart) {
-        LaunchedEffect(Unit) {
-            vm.firstStart = false
-        }
-    }
+//    if(vm.firstStart) {
+//        LaunchedEffect(Unit) {
+//            vm.firstStart = false
+//        }
+//    }
 
-    vm.isExpandedScreen = !navController.isCurrentRoute(ScreenRoute.HomeScreen.route)
-
-
-
-    val isExpanded by remember { derivedStateOf { vm.isExpandedScreen } }
-    val firstStart by remember { derivedStateOf { vm.firstStart } }
+//    vm.isExpandedScreen = !navController.isCurrentRoute(ScreenRoute.HomeScreen.route)
 
 
-//    val transplantBackground by remember { derivedStateOf { vm.transplantBackground } }
+
+//    val isExpanded by remember { derivedStateOf { vm.isExpandedScreen } }
+//    val firstStart by remember { derivedStateOf { vm.firstStart } }
+
+
+
+
+
+
+    // 每次导航栈变化都会触发 recomposition
+//    val isExpanded = remember(navBackStackEntry) {
+//        navController.previousBackStackEntry?.destination?.route == ScreenRoute.HomeScreen.route
+//    }
+
+//    var isExpanded2 = navController.previousRoute() == ScreenRoute.HomeScreen.route
+//
+
+//    println(isExpanded)
 
     val barItems = listOf(
         NavigationItem(
@@ -89,7 +108,9 @@ fun HomeScreen(
     var selectedItem by rememberSaveable { mutableStateOf(firstScreen) }
 
     NavigationSuiteScaffold(
-        modifier = if(firstStart) Modifier else transitionBackground(isExpanded,vm),
+        modifier =
+//            if(firstStart) Modifier else
+            transitionBackground2(navController, ScreenRoute.HomeScreen.route,vm),
         navigationSuiteItems =  {
             barItems.forEach { item ->
                 val route = item.route

@@ -34,6 +34,7 @@ sealed class ScreenRoute(val route: String) {
     data object Module28Screen : ScreenRoute("/module28")
     data object Module29Screen : ScreenRoute("/module29")
     data object Module30Screen : ScreenRoute("/module30")
+    data object Module31Screen : ScreenRoute("/module31")
 
 }
 
