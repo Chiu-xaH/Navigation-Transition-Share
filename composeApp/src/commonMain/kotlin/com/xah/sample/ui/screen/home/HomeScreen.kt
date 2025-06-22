@@ -33,6 +33,7 @@ import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.screen.home.screen.IconSampleScreen
 import com.xah.sample.ui.screen.home.screen.SingleColumnSampleScreen
 import com.xah.sample.ui.screen.home.screen.TwoColumnSampleScreen
+import com.xah.sample.ui.screen.settings.CustomScaffold
 import com.xah.sample.ui.style.transitionBackground
 import com.xah.sample.ui.style.transitionBackground2
 import com.xah.sample.ui.util.MyAnimationManager

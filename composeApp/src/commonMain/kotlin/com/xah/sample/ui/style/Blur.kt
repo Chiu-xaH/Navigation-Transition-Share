@@ -124,25 +124,21 @@ fun transitionBackground2(navHostController: NavHostController,route : String,vm
         targetValue = if(isExpanded) Color.Black.copy(.5f) else Color.Transparent,
         animationSpec = tween(ANIMATION_SPEED, easing = FastOutSlowInEasing)
     )
-    // LinearOutSlowInEasing
     // 蒙版 遮罩
-    if(!(transplantBackground && !transition))
+    if(transition && !transplantBackground)
         Box(modifier = Modifier.fillMaxSize().background(backgroundColor).zIndex(2f))
 
     val transitionModifier = if(transition) Modifier.scale(scale.value).blur(blurSize) else Modifier
 
     // 延时固定时间后，显示UI
-    LaunchedEffect(isExpanded) {
-        if(isExpanded) {
-            // 延时懒加载二级界面 减少因界面渲染和动画过程同步而掉帧
-            vm.showSurface = false
-            delay(ANIMATION_SPEED *1L)
-            vm.showSurface = true
-        } else {
-            println(navHostController.allRouteStack())
-        }
-    }
+//    LaunchedEffect(isExpanded) {
+//        if(isExpanded) {
+////             延时懒加载二级界面 减少因界面渲染和动画过程同步而掉帧
+//            vm.showSurface = false
+//            delay(ANIMATION_SPEED *1L)
+//            vm.showSurface = true
+//        }
+//    }
 
     return transitionModifier
-//    return transitionModifier.let { if (motionBlur) it.blur(blurSize) else it }
 }

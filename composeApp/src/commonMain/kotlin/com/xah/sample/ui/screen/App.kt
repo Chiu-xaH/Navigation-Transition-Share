@@ -33,6 +33,7 @@ import com.xah.sample.ui.screen.home.HomeScreen
 import com.xah.sample.ui.screen.settings.SettingsScreen
 import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
+import com.xah.sample.ui.util.allRouteStack
 import com.xah.sample.ui.util.isCurrentRoute
 import com.xah.sample.ui.util.navigateAndSaveForTransition
 import com.xah.sample.viewmodel.UIViewModel
@@ -110,7 +111,9 @@ fun AppNavHost(vmUI : UIViewModel) {
                     this@composable,
                     boundsTransform,
                 ) {
-                    navController.navigateAndSaveForTransition(firstRoute)
+                    println("READY BACK" + navController.allRouteStack())
+                    navController.popBackStack()
+//                    navController.navigateAndSaveForTransition(firstRoute)
                 }
             }
             for(i in 1 until 32) {
@@ -118,13 +121,14 @@ fun AppNavHost(vmUI : UIViewModel) {
                     composable(route) {
                         DetailScreen(
                             vmUI,
+                            navController,
 //                            showSurface,
                             route,
                             this@SharedTransitionLayout,
                             this@composable,
                             boundsTransform,
                         ) {
-
+                            println("READY BACK" + navController.allRouteStack())
                             navController.popBackStack()
                         }
                     }

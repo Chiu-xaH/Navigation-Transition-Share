@@ -1,14 +1,9 @@
 package com.xah.sample.ui.util
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.style.TransitionState
-import com.xah.sample.viewmodel.UIViewModel
 
 fun NavController.navigateAndClear(route: String) {
     navigate(route) {
@@ -19,9 +14,9 @@ fun NavController.navigateAndClear(route: String) {
 
 fun NavController.navigateAndSave(route: String) {
     navigate(route) {
-        popUpTo(graph.startDestinationId) {
-            saveState = true
-        }
+//        popUpTo(graph.startDestinationId) {
+//            saveState = true
+//        }
         launchSingleTop = true
         restoreState = true
     }
@@ -29,7 +24,9 @@ fun NavController.navigateAndSave(route: String) {
 
 fun NavController.navigateAndSaveForTransition(route: String, transplantBackground : Boolean = false) {
     TransitionState.transplantBackground = transplantBackground
+    println("READY GO $route | CURRENT" + this.allRouteStack())
     navigateAndSave(route)
+    println("GONE" + this.allRouteStack())
 }
 
 @Composable
@@ -46,3 +43,4 @@ fun NavController.allRouteStack() : List<String> = this.currentBackStack.value.m
 //fun rememberIsPreviousHome(navController: NavController): Boolean {
 //   val d = navController.currentBackStack.collectAsState(initial = "")
 //}
+

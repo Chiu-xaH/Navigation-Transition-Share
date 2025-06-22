@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -27,18 +26,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -52,7 +52,6 @@ import animationsample.composeapp.generated.resources.close
 import animationsample.composeapp.generated.resources.deployed_code
 import animationsample.composeapp.generated.resources.settings
 import animationsample.composeapp.generated.resources.swipe_left
-import animationsample.composeapp.generated.resources.texture
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.logic.util.CAN_MOTION_BLUR
 import com.xah.sample.ui.component.DividerTextExpandedWith
@@ -61,9 +60,12 @@ import com.xah.sample.ui.style.TransitionState
 import com.xah.sample.ui.style.topBarTransplantColor
 import com.xah.sample.ui.style.transitionBackground2
 import com.xah.sample.ui.util.MyAnimationManager
+import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
+import com.xah.sample.ui.util.isCurrentRoute
 import com.xah.sample.ui.util.navigateAndSaveForTransition
+import com.xah.sample.ui.util.previousRoute
 import com.xah.sample.viewmodel.UIViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
@@ -92,7 +94,9 @@ fun SettingsScreen(
 
     with(sharedTransitionScope) {
         CustomScaffold(
-            showSurface = vm.showSurface,
+//            showSurface = vm.showSurface,
+            route = route,
+            navHostController = navController,
             modifier =
                 transitionBackground2(navController, ScreenRoute.SettingsScreen.route,vm)
                 .fillMaxSize()
@@ -103,7 +107,9 @@ fun SettingsScreen(
                     sharedContentState = rememberSharedContentState(key = "container_$route"),
                     animatedVisibilityScope = animatedContentScope,
                     resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                ),
+                )
+//                .skipToLookaheadSize()
+            ,
             topBar = {
                 TopAppBar(
                     title = { Text("设置") },
@@ -236,7 +242,6 @@ fun SettingsScreen(
                                 .clickable {
                                     navController.navigateAndSaveForTransition(r)
                                 },
-//                        colors = MaterialTheme.colorScheme.secondaryContainer,
                             headlineContent = { Text(r) },
                             leadingContent = {
                                 Icon(
@@ -263,15 +268,68 @@ fun SettingsScreen(
 
 @Composable
 fun CustomScaffold(
-    showSurface : Boolean,
+//    showSurface : Boolean,
+    route: String,
+    navHostController : NavController,
     modifier: Modifier = Modifier,
     topBar: @Composable (() -> Unit) = {},
     bottomBar: @Composable (() -> Unit) = {},
     floatingActionButton: @Composable (() -> Unit) = {},
-    floatingActionButtonPosition: FabPosition = FabPosition. End,
+    floatingActionButtonPosition: FabPosition = FabPosition.End,
     containerColor : Color? = null,
     content: @Composable ((PaddingValues) -> Unit)
 ) {
+    // 当从CustomScaffold1向CustomScaffold2时，CustomScaffold2先showSurface=false再true，而CustomScaffold1一直为true
+    val isCurrentEntry = navHostController.isCurrentRoute(route)
+//            || navHostController.previousRoute() == route
+    val isPreviousEntry = navHostController.previousRoute() == route
+    // 当回退时，即从CustomScaffold2回CustomScaffold1时，CustomScaffold2立刻showSurface=false，而CustomScaffold1一直为true
+    var show by rememberSaveable(route) { mutableStateOf(false) }
+
+    LaunchedEffect(isCurrentEntry) {
+        // 当前页面首次进入时播放动画
+        if (isCurrentEntry && !show) {
+            show = false
+            delay(ANIMATION_SPEED* 1L)
+            show = true
+        }
+    }
+
+// 回退后恢复上一个页面的显示状态
+    LaunchedEffect(isPreviousEntry) {
+        if (isPreviousEntry) {
+            show = true
+        }
+    }
+    LaunchedEffect(isCurrentEntry,isPreviousEntry) {
+        if(!isCurrentEntry && !isPreviousEntry) {
+            show = false
+        }
+        println("route " + route + " | current "+ isCurrentEntry + "| previous" + " " + isPreviousEntry)
+//        if(isCurrentEntry) {
+//            if(show) {
+//                return@LaunchedEffect
+//            }
+//            if(!show) {
+//                show = false
+//                delay(ANIMATION_SPEED *1L)
+//                show = true
+//            } else {
+//                show = false
+//            }
+//        }
+//        if(isPreviousEntry) {
+//            show = true
+//        }
+//        if(isCurrentEntry || isPreviousEntry) {
+//            show = false
+//            delay(ANIMATION_SPEED *1L)
+//            show = true
+//        } else {
+//            show = false
+//        }
+    }
+
     Scaffold(
         containerColor = containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface,
         modifier = modifier,
@@ -281,7 +339,7 @@ fun CustomScaffold(
         floatingActionButtonPosition = floatingActionButtonPosition,
     ) { innerPadding ->
         AnimatedVisibility(
-            visible = showSurface,
+            visible = show,
             enter  = if(MyAnimationManager.ANIMATION_SPEED == 0) fadeIn(tween(durationMillis = 0)) else fadeIn(),
             exit = fadeOut(tween(durationMillis = 0))
         ) {

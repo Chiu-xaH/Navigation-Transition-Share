@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavHostController
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.close
 import animationsample.composeapp.generated.resources.deployed_code
@@ -40,6 +41,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun DetailScreen(
     vm : UIViewModel,
+    navHostController: NavHostController,
 //    showSurface : Boolean,
     route : String,
     sharedTransitionScope: SharedTransitionScope,
@@ -50,7 +52,9 @@ fun DetailScreen(
     with(sharedTransitionScope) {
         CustomScaffold (
 //            containerColor = MaterialTheme.colorScheme,
-            showSurface = vm.showSurface,
+//            showSurface = vm.showSurface,
+            route = route,
+            navHostController = navHostController,
             modifier = Modifier
                 .fillMaxSize()
                 .sharedBounds(
@@ -61,9 +65,10 @@ fun DetailScreen(
                     animatedVisibilityScope = animatedContentScope,
                     resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
                 )
-                .clickable {
-                    onBackPressed()
-                },
+//                .clickable {
+//                    onBackPressed()
+//                },
+                ,
             topBar = {
                 TopAppBar(
                     navigationIcon = {
