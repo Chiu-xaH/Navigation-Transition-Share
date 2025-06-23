@@ -44,7 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.animation
 import animationsample.composeapp.generated.resources.blur_off
@@ -55,12 +54,12 @@ import animationsample.composeapp.generated.resources.settings
 import animationsample.composeapp.generated.resources.swipe_left
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.logic.util.CAN_MOTION_BLUR
+import com.xah.sample.ui.component.CustomScaffold
 import com.xah.sample.ui.component.DividerTextExpandedWith
 import com.xah.sample.ui.component.TransplantListItem
 import com.xah.sample.ui.style.TransitionState
-import com.xah.sample.ui.style.TransitionState.currentRoute
 import com.xah.sample.ui.style.topBarTransplantColor
-import com.xah.sample.ui.style.transitionBackground2
+import com.xah.sample.ui.style.transitionBackground
 import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
 import com.xah.sample.ui.util.isCurrentRoute
@@ -75,7 +74,6 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun SettingsScreen(
     vm : UIViewModel,
-//    showSurface : Boolean,
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
@@ -97,11 +95,10 @@ fun SettingsScreen(
 
     with(sharedTransitionScope) {
         CustomScaffold(
-//            showSurface = vm.showSurface,
             route = route,
             navHostController = navController,
             modifier =
-                transitionBackground2(navController, ScreenRoute.SettingsScreen.route,vm)
+                transitionBackground(navController, ScreenRoute.SettingsScreen.route,vm)
                 .fillMaxSize()
                 .sharedBounds(
                     boundsTransform = boundsTransform,
@@ -269,99 +266,3 @@ fun SettingsScreen(
 }
 
 
-@Composable
-fun CustomScaffold(
-//    showSurface : Boolean,
-    route: String,
-    navHostController : NavController,
-    modifier: Modifier = Modifier,
-    topBar: @Composable (() -> Unit) = {},
-    bottomBar: @Composable (() -> Unit) = {},
-    floatingActionButton: @Composable (() -> Unit) = {},
-    floatingActionButtonPosition: FabPosition = FabPosition.End,
-    containerColor : Color? = null,
-    content: @Composable ((PaddingValues) -> Unit)
-) {
-    // 当从CustomScaffold1向CustomScaffold2时，CustomScaffold2先showSurface=false再true，而CustomScaffold1一直为true
-    val isCurrentEntry = navHostController.isCurrentRoute(route)
-//            || navHostController.previousRoute() == route
-    val isPreviousEntry = navHostController.previousRoute() == route
-    // 当回退时，即从CustomScaffold2回CustomScaffold1时，CustomScaffold2立刻showSurface=false，而CustomScaffold1一直为true
-    var show by rememberSaveable(route) { mutableStateOf(false) }
-
-    LaunchedEffect(isCurrentEntry) {
-        // 当前页面首次进入时播放动画
-        if (isCurrentEntry && !show) {
-            show = false
-            delay(ANIMATION_SPEED* 1L)
-            show = true
-        } else if(show) {
-            if(navHostController.isInBottom(route)) {
-                return@LaunchedEffect
-            }
-            show = false
-        }
-    }
-
-// 回退后恢复上一个页面的显示状态
-    LaunchedEffect(isPreviousEntry) {
-        if (isPreviousEntry) {
-            show = true
-        }
-    }
-    LaunchedEffect(isCurrentEntry,isPreviousEntry) {
-//        if(isCurrentEntry && !isPreviousEntry) {
-            // 有两种可能
-            // 当前布局收起时父布局 应该保持show=true
-            // 当前布局展开时当前布局 应该延时显示
-            // 如何判断呢？
-//        } else if(!isCurrentEntry && isCurrentEntry) {
-            // 有两种可能
-            // 当前布局收起时当前布局 应该立刻show=false
-            // 当前布局展开时父布局 应该保持show=true
-//        }
-//        if(!isCurrentEntry && !isPreviousEntry) {
-//            show = false
-//        }
-        println("route $route | current $isCurrentEntry| previous $isPreviousEntry")
-//        if(isCurrentEntry) {
-//            if(show) {
-//                return@LaunchedEffect
-//            }
-//            if(!show) {
-//                show = false
-//                delay(ANIMATION_SPEED *1L)
-//                show = true
-//            } else {
-//                show = false
-//            }
-//        }
-//        if(isPreviousEntry) {
-//            show = true
-//        }
-//        if(isCurrentEntry || isPreviousEntry) {
-//            show = false
-//            delay(ANIMATION_SPEED *1L)
-//            show = true
-//        } else {
-//            show = false
-//        }
-    }
-
-    Scaffold(
-        containerColor = containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface,
-        modifier = modifier,
-        topBar = topBar,
-        bottomBar = bottomBar,
-        floatingActionButton = floatingActionButton,
-        floatingActionButtonPosition = floatingActionButtonPosition,
-    ) { innerPadding ->
-        AnimatedVisibility(
-            visible = show,
-            enter  = if(ANIMATION_SPEED == 0) fadeIn(tween(durationMillis = 0)) else fadeIn(),
-            exit = fadeOut(tween(durationMillis = 0))
-        ) {
-            content(innerPadding)
-        }
-    }
-}

@@ -14,9 +14,6 @@ fun NavController.navigateAndClear(route: String) {
 
 fun NavController.navigateAndSave(route: String) {
     navigate(route) {
-//        popUpTo(graph.startDestinationId) {
-//            saveState = true
-//        }
         launchSingleTop = true
         restoreState = true
     }

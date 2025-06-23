@@ -56,23 +56,7 @@ fun App() {
 fun AppNavHost(vmUI : UIViewModel) {
     val navController = rememberNavController()
     val firstRoute = remember { ScreenRoute.HomeScreen.route }
-//    vmUI.isExpandedScreen = !navController.isCurrentRoute(firstRoute)
-    val isExpanded by remember { derivedStateOf { vmUI.isExpandedScreen } }
     val isCenterAnimation by remember { derivedStateOf { vmUI.isCenterAnimation } }
-
-
-//    // 延时固定时间后，显示UI
-//    var showSurface by remember { mutableStateOf(false) }
-//    LaunchedEffect(isExpanded) {
-//        if(isExpanded) {
-//            // 延时懒加载二级界面 减少因界面渲染和动画过程同步而掉帧
-//            showSurface = false
-//            delay(ANIMATION_SPEED *1L)
-//            showSurface = true
-//        } else {
-//            showSurface = false
-//        }
-//    }
 
     val boundsTransform = if(!isCenterAnimation) {
         MyAnimationManager.defaultBoundsTransform
@@ -107,37 +91,31 @@ fun AppNavHost(vmUI : UIViewModel) {
                 SettingsScreen(
                     vmUI,
                     navController,
-//                    showSurface,
                     this@SharedTransitionLayout,
                     this@composable,
                     boundsTransform,
                 ) {
                     println("READY BACK" + navController.allRouteStack())
                     navController.popBackStack()
-//                    navController.navigateAndSaveForTransition(firstRoute)
                 }
             }
             for(i in 1..31) {
-                (ScreenRoute.ModuleScreen.route + "R" + i).let { route ->
-                    composable(route) {
-                        DetailScreenR(
-                            vmUI,
-                            navController,
-                            i,
-                            this@SharedTransitionLayout,
-                            this@composable,
-                            boundsTransform,
-                        )
-                    }
+                composable((ScreenRoute.ModuleScreen.route + "R" + i)) {
+                    DetailScreenR(
+                        vmUI,
+                        navController,
+                        i,
+                        this@SharedTransitionLayout,
+                        this@composable,
+                        boundsTransform,
+                    )
                 }
             }
             for(i in 1..31) {
                 (ScreenRoute.ModuleScreen.route + i).let { route ->
                     composable(route) {
                         DetailScreen(
-                            vmUI,
                             navController,
-//                            showSurface,
                             route,
                             this@SharedTransitionLayout,
                             this@composable,

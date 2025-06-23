@@ -1,7 +1,6 @@
 package com.xah.sample.ui.style
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -11,11 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawWithContent
@@ -25,16 +20,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
-import com.xah.sample.logic.enumeration.Platform
-import com.xah.sample.logic.model.ui.ScreenRoute
-import com.xah.sample.logic.util.getPlatformType
 import com.xah.sample.ui.component.largeCardColor
 import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
-import com.xah.sample.ui.util.allRouteStack
 import com.xah.sample.ui.util.currentRoute
-import com.xah.sample.ui.util.previousRoute
 import com.xah.sample.viewmodel.UIViewModel
-import kotlinx.coroutines.delay
 
 val APP_BLUR_RADIUS = 10.dp
 @Composable
@@ -45,7 +34,6 @@ fun appBlur(
     tweenDuration: Int = ANIMATION_SPEED / 2
 ): Modifier {
     val motionBlur = vm.motionBlur
-//    by DataStoreManager.motionBlurFlow.collectAsState(initial = AppVersion.CAN_MOTION_BLUR)
 
     val blurRadius by animateDpAsState(
         targetValue = if (showBlur && motionBlur) radius else 0.dp,
@@ -71,43 +59,11 @@ fun appBlur(
 }
 
 object TransitionState {
-    lateinit var currentRoute : String
-    lateinit var previousRoute : String
     var transplantBackground = false
 }
 
-// isExpanded=true时，下层背景进入高斯模糊，并用黑色压暗，伴随缩放，上层背景展开
 @Composable
-fun transitionBackground(isExpanded : Boolean,vm : UIViewModel) : Modifier {
-    val motionBlur = vm.motionBlur
-    val transition = vm.forceAnimation
-    val transplantBackground = TransitionState.transplantBackground
-    // 稍微晚于运动结束
-    val blurSize by animateDpAsState(
-        targetValue = if (isExpanded && motionBlur) APP_BLUR_RADIUS else 0.dp, label = ""
-        ,animationSpec = tween(ANIMATION_SPEED + ANIMATION_SPEED/2, easing = FastOutSlowInEasing),
-    )
-    val scale = animateFloatAsState( //.875f
-        targetValue = if (isExpanded) 0.875f else 1f,
-        animationSpec = tween(ANIMATION_SPEED+ ANIMATION_SPEED/2 , easing = FastOutSlowInEasing)
-    )
-    val backgroundColor by animateColorAsState(
-        targetValue = if(isExpanded) Color.Black.copy(.5f) else Color.Transparent,
-        animationSpec = tween(ANIMATION_SPEED, easing = FastOutSlowInEasing)
-    )
-    // LinearOutSlowInEasing
-    // 蒙版 遮罩
-    if(!(transplantBackground && !transition))
-        Box(modifier = Modifier.fillMaxSize().background(backgroundColor).zIndex(2f))
-
-    val transitionModifier = if(transition) Modifier.scale(scale.value).blur(blurSize) else Modifier
-
-    return transitionModifier
-//    return transitionModifier.let { if (motionBlur) it.blur(blurSize) else it }
-}
-
-@Composable
-fun transitionBackground2(navHostController: NavHostController,route : String,vm : UIViewModel) : Modifier {
+fun transitionBackground(navHostController: NavHostController, route : String, vm : UIViewModel) : Modifier {
     val motionBlur = vm.motionBlur
     val transition = vm.forceAnimation
     val transplantBackground = TransitionState.transplantBackground
