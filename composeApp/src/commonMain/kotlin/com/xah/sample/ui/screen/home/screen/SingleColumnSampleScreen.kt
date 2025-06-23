@@ -4,9 +4,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -29,8 +26,9 @@ import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.CARD_NORMAL_DP
 import com.xah.sample.ui.component.StyleCardListItem
+import com.xah.sample.ui.component.containerShare
+import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
-import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.viewmodel.UIViewModel
 import org.jetbrains.compose.resources.painterResource
 
@@ -100,15 +98,17 @@ fun SingleColumnSampleScreen(
                 val route = func[index]
                 with(sharedTransitionScope) {
                     StyleCardListItem(
-                        cardModifier = Modifier
-                            .sharedBounds(
-                                boundsTransform = boundsTransform,
-                                enter = MyAnimationManager.fadeAnimation.enter,
-                                exit = MyAnimationManager.fadeAnimation.exit,
-                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            ),
+                        cardModifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
+//                            Modifier
+//                            .sharedBounds(
+//                                boundsTransform = boundsTransform,
+//                                enter = MyAnimationManager.fadeAnimation.enter,
+//                                exit = MyAnimationManager.fadeAnimation.exit,
+//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
+//                                animatedVisibilityScope = animatedContentScope,
+//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                            )
+                        ,
                         color = MaterialTheme.colorScheme.primaryContainer,
                         headlineContent = { Text(route) },
                         supportingContent = { Text("内容$index")},
@@ -116,11 +116,12 @@ fun SingleColumnSampleScreen(
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
-                                modifier = Modifier.sharedElement(
-                                    boundsTransform = boundsTransform,
-                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                )
+                                modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+//                                    Modifier.sharedElement(
+//                                    boundsTransform = boundsTransform,
+//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
+//                                    animatedVisibilityScope = animatedContentScope,
+//                                )
                             )
                         },
                         modifier = Modifier.clickable {
@@ -134,15 +135,16 @@ fun SingleColumnSampleScreen(
                 val route = func2[index]
                 with(sharedTransitionScope) {
                     ListItem(
-                        modifier = Modifier
-                            .sharedBounds(
-                                boundsTransform = boundsTransform,
-                                enter = MyAnimationManager.fadeAnimation.enter,
-                                exit = MyAnimationManager.fadeAnimation.exit,
-                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            )
+                        modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
+//                            Modifier
+//                            .sharedBounds(
+//                                boundsTransform = boundsTransform,
+//                                enter = MyAnimationManager.fadeAnimation.enter,
+//                                exit = MyAnimationManager.fadeAnimation.exit,
+//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
+//                                animatedVisibilityScope = animatedContentScope,
+//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                            )
                             .clickable {
                                 onItemClick(route)
                             },
@@ -152,11 +154,12 @@ fun SingleColumnSampleScreen(
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
-                                modifier = Modifier.sharedElement(
-                                    boundsTransform = boundsTransform,
-                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                )
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+//                                    Modifier.sharedElement(
+//                                    boundsTransform = boundsTransform,
+//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
+//                                    animatedVisibilityScope = animatedContentScope,
+//                                )
                             )
                         },
                         supportingContent = {

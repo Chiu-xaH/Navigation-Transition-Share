@@ -14,7 +14,7 @@ Wasm(JS)、Desktop(JVM)、iOS、Android
 ```
 
 ## 计划
-预测式返回手势适配、打开动画因Navigation而差异的优化、简易化的封装、仿IOS的顶栏转场...
+打开动画因Navigation而差异的优化、简易化的封装、仿IOS的顶栏转场...
 
 ### 演示
 ![截图](/src/shot.jpg)

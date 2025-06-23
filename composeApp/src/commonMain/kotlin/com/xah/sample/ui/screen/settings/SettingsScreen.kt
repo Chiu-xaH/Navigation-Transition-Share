@@ -1,16 +1,11 @@
 package com.xah.sample.ui.screen.settings
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,13 +14,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
@@ -35,14 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.animation
@@ -57,17 +45,14 @@ import com.xah.sample.logic.util.CAN_MOTION_BLUR
 import com.xah.sample.ui.component.CustomScaffold
 import com.xah.sample.ui.component.DividerTextExpandedWith
 import com.xah.sample.ui.component.TransplantListItem
-import com.xah.sample.ui.style.TransitionState
+import com.xah.sample.ui.component.containerShare
+import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.style.topBarTransplantColor
 import com.xah.sample.ui.style.transitionBackground
 import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
-import com.xah.sample.ui.util.isCurrentRoute
-import com.xah.sample.ui.util.isInBottom
 import com.xah.sample.ui.util.navigateAndSaveForTransition
-import com.xah.sample.ui.util.previousRoute
 import com.xah.sample.viewmodel.UIViewModel
-import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
@@ -89,7 +74,7 @@ fun SettingsScreen(
     LaunchedEffect(isCenterAnimation) {
         if(!isCenterAnimation) {
             vm.animationSpeed = MyAnimationManager.DEFAULT_ANIMATION_SPEED.toFloat()
-            MyAnimationManager.ANIMATION_SPEED = MyAnimationManager.DEFAULT_ANIMATION_SPEED
+            ANIMATION_SPEED = MyAnimationManager.DEFAULT_ANIMATION_SPEED
         }
     }
 
@@ -97,19 +82,22 @@ fun SettingsScreen(
         CustomScaffold(
             route = route,
             navHostController = navController,
-            modifier =
-                transitionBackground(navController, ScreenRoute.SettingsScreen.route,vm)
-                .fillMaxSize()
-                .sharedBounds(
-                    boundsTransform = boundsTransform,
-                    enter = MyAnimationManager.fadeAnimation.enter,
-                    exit = MyAnimationManager.fadeAnimation.exit,
-                    sharedContentState = rememberSharedContentState(key = "container_$route"),
-                    animatedVisibilityScope = animatedContentScope,
-                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                )
+            boundsTransform = boundsTransform,
+            animatedContentScope = animatedContentScope,
+            vm = vm,
+//            modifier =
+//                Modifier.transitionBackground(navController, ScreenRoute.SettingsScreen.route,vm)
+//                .fillMaxSize()
+//                .sharedBounds(
+//                    boundsTransform = boundsTransform,
+//                    enter = MyAnimationManager.fadeAnimation.enter,
+//                    exit = MyAnimationManager.fadeAnimation.exit,
+//                    sharedContentState = rememberSharedContentState(key = "container_$route"),
+//                    animatedVisibilityScope = animatedContentScope,
+//                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                )
 //                .skipToLookaheadSize()
-            ,
+//            ,
             topBar = {
                 TopAppBar(
                     title = { Text("设置") },
@@ -119,11 +107,12 @@ fun SettingsScreen(
                                 painterResource(Res.drawable.settings),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.sharedElement(
-                                    boundsTransform = boundsTransform,
-                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                )
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+//                                    Modifier.sharedElement(
+//                                    boundsTransform = boundsTransform,
+//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
+//                                    animatedVisibilityScope = animatedContentScope,
+//                                )
                             )
                         }
                     },
@@ -229,16 +218,17 @@ fun SettingsScreen(
                     with(sharedTransitionScope) {
 
                         val r = ScreenRoute.Module31Screen.route
-                        ListItem(
-                            modifier = Modifier
-                                .sharedBounds(
-                                    boundsTransform = boundsTransform,
-                                    enter = MyAnimationManager.fadeAnimation.enter,
-                                    exit = MyAnimationManager.fadeAnimation.exit,
-                                    sharedContentState = rememberSharedContentState(key = "container_$r"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                                )
+                        TransplantListItem(
+                            modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=r)
+//                                Modifier
+//                                .sharedBounds(
+//                                    boundsTransform = boundsTransform,
+//                                    enter = MyAnimationManager.fadeAnimation.enter,
+//                                    exit = MyAnimationManager.fadeAnimation.exit,
+//                                    sharedContentState = rememberSharedContentState(key = "container_$r"),
+//                                    animatedVisibilityScope = animatedContentScope,
+//                                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                                )
                                 .clickable {
                                     navController.navigateAndSaveForTransition(r)
                                 },
@@ -247,11 +237,12 @@ fun SettingsScreen(
                                 Icon(
                                     painterResource(Res.drawable.deployed_code),
                                     null,
-                                    modifier = Modifier.sharedElement(
-                                        boundsTransform = boundsTransform,
-                                        sharedContentState = rememberSharedContentState(key = "title_$r"),
-                                        animatedVisibilityScope = animatedContentScope,
-                                    )
+                                    modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = r)
+//                                        Modifier.sharedElement(
+//                                        boundsTransform = boundsTransform,
+//                                        sharedContentState = rememberSharedContentState(key = "title_$r"),
+//                                        animatedVisibilityScope = animatedContentScope,
+//                                    )
                                 )
                             },
                             supportingContent = {

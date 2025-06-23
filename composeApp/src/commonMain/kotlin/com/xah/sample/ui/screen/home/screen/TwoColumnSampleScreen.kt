@@ -4,12 +4,8 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -36,9 +32,10 @@ import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.SmallCard
 import com.xah.sample.ui.component.StyleCardListItem
 import com.xah.sample.ui.component.TransplantListItem
+import com.xah.sample.ui.component.containerShare
+import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.screen.detail.lite.LiteScreen
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
-import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.viewmodel.UIViewModel
 import org.jetbrains.compose.resources.painterResource
 
@@ -109,16 +106,17 @@ fun TwoColumnSampleScreen(
                 val route = func[index]
                 with(sharedTransitionScope) {
                     SmallCard(
-                        modifier = Modifier
-                            .padding(horizontal = 3.dp, vertical = 3.dp)
-                            .sharedBounds(
-                                boundsTransform = boundsTransform,
-                                enter = MyAnimationManager.fadeAnimation.enter,
-                                exit = MyAnimationManager.fadeAnimation.exit,
-                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            ),
+                        modifier = containerShare(Modifier.padding(horizontal = 3.dp, vertical = 3.dp),animatedContentScope,boundsTransform,route)
+
+//                            .sharedBounds(
+//                                boundsTransform = boundsTransform,
+//                                enter = MyAnimationManager.fadeAnimation.enter,
+//                                exit = MyAnimationManager.fadeAnimation.exit,
+//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
+//                                animatedVisibilityScope = animatedContentScope,
+//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                            )
+                        ,
                         color = MaterialTheme.colorScheme.primaryContainer
                     ) {
                         TransplantListItem(
@@ -127,11 +125,12 @@ fun TwoColumnSampleScreen(
                                 Icon(
                                     painterResource(Res.drawable.deployed_code),
                                     null,
-                                    modifier = Modifier.sharedElement(
-                                        boundsTransform = boundsTransform,
-                                        sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                        animatedVisibilityScope = animatedContentScope,
-                                    )
+                                    modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+//                                        Modifier.sharedElement(
+//                                        boundsTransform = boundsTransform,
+//                                        sharedContentState = rememberSharedContentState(key = "title_$route"),
+//                                        animatedVisibilityScope = animatedContentScope,
+//                                    )
                                 )
                             },
                             modifier = Modifier.clickable {
@@ -184,21 +183,24 @@ fun RSampleScreen(
                         Icon(
                             painterResource(Res.drawable.deployed_code),
                             null,
-                            modifier = Modifier.sharedElement(
-                                boundsTransform = boundsTransform,
-                                sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                            )
+                            modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+//                                Modifier.sharedElement(
+//                                boundsTransform = boundsTransform,
+//                                sharedContentState = rememberSharedContentState(key = "title_$route"),
+//                                animatedVisibilityScope = animatedContentScope,
+//                            )
                         )
                     },
-                    cardModifier = Modifier.align(Alignment.Center).sharedBounds(
-                        boundsTransform = boundsTransform,
-                        enter = MyAnimationManager.fadeAnimation.enter,
-                        exit = MyAnimationManager.fadeAnimation.exit,
-                        sharedContentState = rememberSharedContentState(key = "container_$route"),
-                        animatedVisibilityScope = animatedContentScope,
-                        resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                    ),
+                    cardModifier = containerShare(Modifier.align(Alignment.Center),animatedContentScope,boundsTransform,route, resize = true)
+//                        .sharedBounds(
+//                        boundsTransform = boundsTransform,
+//                        enter = MyAnimationManager.fadeAnimation.enter,
+//                        exit = MyAnimationManager.fadeAnimation.exit,
+//                        sharedContentState = rememberSharedContentState(key = "container_$route"),
+//                        animatedVisibilityScope = animatedContentScope,
+//                        resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                    )
+                    ,
                     modifier = Modifier.clickable {
                         onItemClick(route)
                     },

@@ -25,9 +25,9 @@ import animationsample.composeapp.generated.resources.deployed_code
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.component.CustomScaffold
 import com.xah.sample.ui.component.StyleCardListItem
+import com.xah.sample.ui.component.containerShare
+import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.style.topBarTransplantColor
-import com.xah.sample.ui.style.transitionBackground
-import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.ui.util.navigateAndSaveForTransition
 import com.xah.sample.viewmodel.UIViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -35,6 +35,7 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
+    vm: UIViewModel,
     navHostController: NavHostController,
     route : String,
     sharedTransitionScope: SharedTransitionScope,
@@ -45,21 +46,24 @@ fun DetailScreen(
     with(sharedTransitionScope) {
         CustomScaffold (
             route = route,
+            vm = vm,
+            boundsTransform = boundsTransform,
+            animatedContentScope = animatedContentScope,
             navHostController = navHostController,
-            modifier = Modifier
-                .fillMaxSize()
-                .sharedBounds(
-                    boundsTransform = boundsTransform,
-                    enter = MyAnimationManager.fadeAnimation.enter,
-                    exit = MyAnimationManager.fadeAnimation.exit,
-                    sharedContentState = rememberSharedContentState(key = "container_$route"),
-                    animatedVisibilityScope = animatedContentScope,
-                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                )
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .sharedBounds(
+//                    boundsTransform = boundsTransform,
+//                    enter = MyAnimationManager.fadeAnimation.enter,
+//                    exit = MyAnimationManager.fadeAnimation.exit,
+//                    sharedContentState = rememberSharedContentState(key = "container_$route"),
+//                    animatedVisibilityScope = animatedContentScope,
+//                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                )
 //                .clickable {
 //                    onBackPressed()
 //                },
-                ,
+//                ,
             topBar = {
                 TopAppBar(
                     navigationIcon = {
@@ -68,11 +72,12 @@ fun DetailScreen(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.sharedElement(
-                                    boundsTransform = boundsTransform,
-                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                )
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+//                                    Modifier.sharedElement(
+//                                    boundsTransform = boundsTransform,
+//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
+//                                    animatedVisibilityScope = animatedContentScope,
+//                                )
                             )
                         }
                     },
@@ -117,18 +122,21 @@ fun DetailScreenR(
     with(sharedTransitionScope) {
         CustomScaffold (
             route = route,
+            vm = vm,
+            boundsTransform = boundsTransform,
+            animatedContentScope = animatedContentScope,
             navHostController = navHostController,
-            modifier =  transitionBackground(navHostController, route,vm)
-                .fillMaxSize()
-                .sharedBounds(
-                    boundsTransform = boundsTransform,
-                    enter = MyAnimationManager.fadeAnimation.enter,
-                    exit = MyAnimationManager.fadeAnimation.exit,
-                    sharedContentState = rememberSharedContentState(key = "container_$route"),
-                    animatedVisibilityScope = animatedContentScope,
-                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                )
-            ,
+//            modifier =  transitionBackground(navHostController, route,vm)
+//                .fillMaxSize()
+//                .sharedBounds(
+//                    boundsTransform = boundsTransform,
+//                    enter = MyAnimationManager.fadeAnimation.enter,
+//                    exit = MyAnimationManager.fadeAnimation.exit,
+//                    sharedContentState = rememberSharedContentState(key = "container_$route"),
+//                    animatedVisibilityScope = animatedContentScope,
+//                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                )
+//            ,
             topBar = {
                 TopAppBar(
                     navigationIcon = {
@@ -137,11 +145,12 @@ fun DetailScreenR(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.sharedElement(
-                                    boundsTransform = boundsTransform,
-                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                )
+                                modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+//                                    Modifier.sharedElement(
+//                                    boundsTransform = boundsTransform,
+//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
+//                                    animatedVisibilityScope = animatedContentScope,
+//                                )
                             )
                         }
                     },
@@ -168,20 +177,25 @@ fun DetailScreenR(
                             Text("界面 $newRouteI")
                         },
                         leadingContent = {
-                            Icon(painterResource(Res.drawable.deployed_code),null, modifier = Modifier.sharedElement(
-                                boundsTransform = boundsTransform,
-                                sharedContentState = rememberSharedContentState(key = "title_$newRoute"),
-                                animatedVisibilityScope = animatedContentScope,
-                            ))
+                            Icon(painterResource(Res.drawable.deployed_code),null,
+
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = newRoute)
+//                                    Modifier.sharedElement(
+//                                boundsTransform = boundsTransform,
+//                                sharedContentState = rememberSharedContentState(key = "title_$newRoute"),
+//                                animatedVisibilityScope = animatedContentScope,
+//                            )
+                    )
                         },
-                        cardModifier =  Modifier.align(Alignment.Center).sharedBounds(
-                            boundsTransform = boundsTransform,
-                            enter = MyAnimationManager.fadeAnimation.enter,
-                            exit = MyAnimationManager.fadeAnimation.exit,
-                            sharedContentState = rememberSharedContentState(key = "container_$newRoute"),
-                            animatedVisibilityScope = animatedContentScope,
-                            resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                        ),
+                        cardModifier =  containerShare(Modifier.align(Alignment.Center),animatedContentScope,boundsTransform,newRoute, resize = true),
+//                            .sharedBounds(
+//                            boundsTransform = boundsTransform,
+//                            enter = MyAnimationManager.fadeAnimation.enter,
+//                            exit = MyAnimationManager.fadeAnimation.exit,
+//                            sharedContentState = rememberSharedContentState(key = "container_$newRoute"),
+//                            animatedVisibilityScope = animatedContentScope,
+//                            resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                        ),
                         color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier.clickable {
                             navHostController.navigateAndSaveForTransition(newRoute)

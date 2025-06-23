@@ -63,7 +63,11 @@ object TransitionState {
 }
 
 @Composable
-fun transitionBackground(navHostController: NavHostController, route : String, vm : UIViewModel) : Modifier {
+fun Modifier.transitionBackground(
+    navHostController: NavHostController,
+    route : String,
+    vm : UIViewModel
+) : Modifier {
     val motionBlur = vm.motionBlur
     val transition = vm.forceAnimation
     val transplantBackground = TransitionState.transplantBackground
@@ -85,7 +89,7 @@ fun transitionBackground(navHostController: NavHostController, route : String, v
     if(transition && !transplantBackground)
         Box(modifier = Modifier.fillMaxSize().background(backgroundColor).zIndex(2f))
 
-    val transitionModifier = if(transition) Modifier.scale(scale.value).blur(blurSize) else Modifier
+    val transitionModifier = if(transition) this.scale(scale.value).blur(blurSize) else this
 
     // 延时固定时间后，显示UI
 //    LaunchedEffect(isExpanded) {

@@ -4,9 +4,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,9 +21,10 @@ import androidx.navigation.NavHostController
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.settings
 import com.xah.sample.logic.model.ui.ScreenRoute
+import com.xah.sample.ui.component.containerShare
+import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.style.topBarStyle
 import com.xah.sample.ui.style.topBarTransplantColor
-import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.ui.util.navigateAndSaveForTransition
 import com.xah.sample.viewmodel.UIViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -57,24 +55,26 @@ fun SharedTopBar(
                             onClick = {
                                 navController.navigateAndSaveForTransition(route,true)
                             },
-                            modifier = Modifier.sharedBounds(
-                                boundsTransform = boundsTransform,
-                                enter = MyAnimationManager.fadeAnimation.enter,
-                                exit = MyAnimationManager.fadeAnimation.exit,
-                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            )
+                            modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
+//                                Modifier.sharedBounds(
+//                                boundsTransform = boundsTransform,
+//                                enter = MyAnimationManager.fadeAnimation.enter,
+//                                exit = MyAnimationManager.fadeAnimation.exit,
+//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
+//                                animatedVisibilityScope = animatedContentScope,
+//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+//                            )
                         ) {
                             Icon(
                                 painterResource(Res.drawable.settings),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.sharedElement(
-                                    boundsTransform = boundsTransform,
-                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                )
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+//                                    Modifier.sharedElement(
+//                                    boundsTransform = boundsTransform,
+//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
+//                                    animatedVisibilityScope = animatedContentScope,
+//                                )
                             )
                         }
                     }

@@ -1,10 +1,16 @@
 package com.xah.sample.ui.component
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.BoundsTransform
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.ScaleToBounds
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -14,21 +20,45 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
+import androidx.compose.ui.layout.ContentScale
+import androidx.navigation.NavHostController
 import com.xah.sample.ui.style.TransitionState
+import com.xah.sample.ui.style.transitionBackground
+import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
 import com.xah.sample.ui.util.isCurrentRoute
 import com.xah.sample.ui.util.isInBottom
 import com.xah.sample.ui.util.previousRoute
+import com.xah.sample.viewmodel.UIViewModel
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun CustomScaffold(
+fun SharedTransitionScope.CustomScaffold(
+    animatedContentScope: AnimatedContentScope,
+    boundsTransform: BoundsTransform,
     route: String,
-    navHostController : NavController,
-    modifier: Modifier = Modifier,
+    vm : UIViewModel,
+    navHostController : NavHostController,
+    modifier: Modifier = containerShare(
+        Modifier.fillMaxSize()
+            .transitionBackground( navHostController, route, vm)
+            ,
+        animatedContentScope,
+        boundsTransform,
+        route,
+        resize = false
+    ),
+//        .sharedBounds(
+//            boundsTransform = boundsTransform,
+//            enter = MyAnimationManager.fadeAnimation.enter,
+//            exit = MyAnimationManager.fadeAnimation.exit,
+//            sharedContentState = rememberSharedContentState(key = "container_$route"),
+//            animatedVisibilityScope = animatedContentScope,
+//        ),
     topBar: @Composable (() -> Unit) = {},
     bottomBar: @Composable (() -> Unit) = {},
     floatingActionButton: @Composable (() -> Unit) = {},
@@ -83,3 +113,56 @@ fun CustomScaffold(
         }
     }
 }
+// 容器共享元素 注意：主界面（CustomScaffold）需要指定resize=false(已经在CustomScaffold指定了)，初始容器无需指定
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.containerShare(
+    modifier: Modifier = Modifier,
+    animatedContentScope: AnimatedContentScope,
+    boundsTransform: BoundsTransform,
+    route : String,
+    resize : Boolean = true
+) : Modifier {
+    return modifier.sharedBounds(
+        boundsTransform = boundsTransform,
+        enter = MyAnimationManager.fadeAnimation.enter,
+        exit = MyAnimationManager.fadeAnimation.exit,
+        sharedContentState = rememberSharedContentState(key = "container_$route"),
+        animatedVisibilityScope = animatedContentScope,
+        resizeMode = if(resize) SharedTransitionScope.ResizeMode.RemeasureToBounds else ScaleToBounds(ContentScale.FillWidth, Center)
+    )
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.singleElementShare(
+    modifier: Modifier = Modifier,
+    animatedContentScope: AnimatedContentScope,
+    boundsTransform: BoundsTransform,
+    title : String,
+    route : String,
+) : Modifier {
+    return modifier.sharedElement(
+        boundsTransform = boundsTransform,
+        sharedContentState = rememberSharedContentState(key = "${title}_$route"),
+        animatedVisibilityScope = animatedContentScope,
+    )
+}
+// 标题共享元素
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.iconElementShare(
+    modifier: Modifier = Modifier,
+    animatedContentScope: AnimatedContentScope,
+    boundsTransform: BoundsTransform,
+    route : String,
+) : Modifier = singleElementShare(modifier,animatedContentScope,boundsTransform,"icon",route)
+// 图标共享元素
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.titleElementShare(
+    modifier: Modifier = Modifier,
+    animatedContentScope: AnimatedContentScope,
+    boundsTransform: BoundsTransform,
+    route : String,
+) : Modifier = singleElementShare(modifier,animatedContentScope,boundsTransform,"icon",route)

@@ -115,6 +115,7 @@ fun AppNavHost(vmUI : UIViewModel) {
                 (ScreenRoute.ModuleScreen.route + i).let { route ->
                     composable(route) {
                         DetailScreen(
+                            vmUI,
                             navController,
                             route,
                             this@SharedTransitionLayout,
