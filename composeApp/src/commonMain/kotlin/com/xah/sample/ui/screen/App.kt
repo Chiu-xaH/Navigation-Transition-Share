@@ -29,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.screen.detail.DetailScreen
+import com.xah.sample.ui.screen.detail.DetailScreenR
 import com.xah.sample.ui.screen.home.HomeScreen
 import com.xah.sample.ui.screen.settings.SettingsScreen
 import com.xah.sample.ui.util.MyAnimationManager
@@ -116,7 +117,21 @@ fun AppNavHost(vmUI : UIViewModel) {
 //                    navController.navigateAndSaveForTransition(firstRoute)
                 }
             }
-            for(i in 1 until 32) {
+            for(i in 1..31) {
+                (ScreenRoute.ModuleScreen.route + "R" + i).let { route ->
+                    composable(route) {
+                        DetailScreenR(
+                            vmUI,
+                            navController,
+                            i,
+                            this@SharedTransitionLayout,
+                            this@composable,
+                            boundsTransform,
+                        )
+                    }
+                }
+            }
+            for(i in 1..31) {
                 (ScreenRoute.ModuleScreen.route + i).let { route ->
                     composable(route) {
                         DetailScreen(

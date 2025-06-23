@@ -30,7 +30,9 @@ import animationsample.composeapp.generated.resources.deployed_code_filled
 import com.xah.sample.logic.model.ui.HomeScreenRoute
 import com.xah.sample.logic.model.ui.NavigationItem
 import com.xah.sample.logic.model.ui.ScreenRoute
+import com.xah.sample.ui.screen.detail.DetailScreenR
 import com.xah.sample.ui.screen.home.screen.IconSampleScreen
+import com.xah.sample.ui.screen.home.screen.RSampleScreen
 import com.xah.sample.ui.screen.home.screen.SingleColumnSampleScreen
 import com.xah.sample.ui.screen.home.screen.TwoColumnSampleScreen
 import com.xah.sample.ui.screen.settings.CustomScaffold
@@ -103,6 +105,12 @@ fun HomeScreen(
             painterResource(Res.drawable.deployed_code),
             painterResource(Res.drawable.deployed_code_filled)
         ),
+        NavigationItem(
+            HomeScreenRoute.RSampleScreen.route,
+            "示例4",
+            painterResource(Res.drawable.deployed_code),
+            painterResource(Res.drawable.deployed_code_filled)
+        ),
     )
     val navControllerHome = rememberNavController()
     val firstScreen = remember { HomeScreenRoute.TwoColumnSampleScreen.route }
@@ -144,6 +152,9 @@ fun HomeScreen(
             }
             composable(HomeScreenRoute.IconSampleScreen.route) {
                 IconSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
+            }
+            composable(HomeScreenRoute.RSampleScreen.route) {
+                RSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
             }
         }
     }

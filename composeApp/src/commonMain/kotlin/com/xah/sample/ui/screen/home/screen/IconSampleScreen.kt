@@ -41,6 +41,7 @@ import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.CARD_NORMAL_DP
 import com.xah.sample.ui.component.DividerTextExpandedWith
 import com.xah.sample.ui.component.StyleCardListItem
+import com.xah.sample.ui.screen.detail.DetailScreenR
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
 import com.xah.sample.ui.style.RowHorizontal
 import com.xah.sample.ui.util.MyAnimationManager
@@ -138,79 +139,6 @@ fun IconSampleScreen(
             DividerTextExpandedWith("有边框按钮",vm) {
                 RowHorizontal(modifier = Modifier.fillMaxWidth())  {
                     with(sharedTransitionScope) {
-                        val route = func2[2]
-                        OutlinedButton (
-                            onClick = {
-                                navController.navigateAndSaveForTransition(route)
-                            },
-                            modifier = Modifier.sharedBounds(
-                                boundsTransform = boundsTransform,
-                                enter = MyAnimationManager.fadeAnimation.enter,
-                                exit = MyAnimationManager.fadeAnimation.exit,
-                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            )
-                        ) {
-                            Icon(
-                                painterResource(Res.drawable.deployed_code),
-                                null,
-                                modifier = Modifier.sharedElement(
-                                    boundsTransform = boundsTransform,
-                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                )
-                            )
-                        }
-                    }
-                    Spacer(Modifier.width(APP_HORIZONTAL_DP))
-                    with(sharedTransitionScope) {
-                        val route = func2[3]
-                        Button  (
-                            onClick = {
-                                navController.navigateAndSaveForTransition(route)
-                            },
-                            modifier = Modifier.sharedBounds(
-                                boundsTransform = boundsTransform,
-                                enter = MyAnimationManager.fadeAnimation.enter,
-                                exit = MyAnimationManager.fadeAnimation.exit,
-                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            )
-                        ) {
-                            Text("按钮")
-                        }
-                    }
-                    Spacer(Modifier.width(APP_HORIZONTAL_DP))
-                    with(sharedTransitionScope) {
-                        val route = func2[4]
-                        FilledTonalIconButton (
-                            onClick = {
-                                navController.navigateAndSaveForTransition(route)
-                            },
-                            modifier = Modifier.sharedBounds(
-                                boundsTransform = boundsTransform,
-                                enter = MyAnimationManager.fadeAnimation.enter,
-                                exit = MyAnimationManager.fadeAnimation.exit,
-                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            )
-                        ) {
-                            Icon(
-                                painterResource(Res.drawable.deployed_code),
-                                null,
-                                modifier = Modifier.sharedElement(
-                                    boundsTransform = boundsTransform,
-                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                    animatedVisibilityScope = animatedContentScope,
-                                )
-                            )
-                        }
-                    }
-                    Spacer(Modifier.width(APP_HORIZONTAL_DP))
-                    with(sharedTransitionScope) {
                         val route = func2[5]
                         FloatingActionButton (
                             elevation =  FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
@@ -237,40 +165,6 @@ fun IconSampleScreen(
                             )
                         }
                     }
-                }
-            }
-            DividerTextExpandedWith("标签",vm) {
-                RowHorizontal(modifier = Modifier.fillMaxWidth())  {
-                    with(sharedTransitionScope) {
-                        val route = func2[6]
-                        FilterChip  (
-                            onClick = {
-                                navController.navigateAndSaveForTransition(route)
-                            },
-                            label = { Text("标签") },
-                            selected = false,
-                            leadingIcon = {
-                                Icon(
-                                    painterResource(Res.drawable.deployed_code),
-                                    null,
-                                    modifier = Modifier.sharedElement(
-                                        boundsTransform = boundsTransform,
-                                        sharedContentState = rememberSharedContentState(key = "title_$route"),
-                                        animatedVisibilityScope = animatedContentScope,
-                                    )
-                                )
-                            },
-                            modifier = Modifier.sharedBounds(
-                                boundsTransform = boundsTransform,
-                                enter = MyAnimationManager.fadeAnimation.enter,
-                                exit = MyAnimationManager.fadeAnimation.exit,
-                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-                                animatedVisibilityScope = animatedContentScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            )
-                        )
-                    }
-                    Spacer(Modifier.width(APP_HORIZONTAL_DP))
                 }
             }
             Spacer(Modifier.height(innerPadding.calculateBottomPadding() + APP_HORIZONTAL_DP).navigationBarsPadding())

@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.animation
 import animationsample.composeapp.generated.resources.blur_off
@@ -57,11 +58,13 @@ import com.xah.sample.logic.util.CAN_MOTION_BLUR
 import com.xah.sample.ui.component.DividerTextExpandedWith
 import com.xah.sample.ui.component.TransplantListItem
 import com.xah.sample.ui.style.TransitionState
+import com.xah.sample.ui.style.TransitionState.currentRoute
 import com.xah.sample.ui.style.topBarTransplantColor
 import com.xah.sample.ui.style.transitionBackground2
 import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
 import com.xah.sample.ui.util.isCurrentRoute
+import com.xah.sample.ui.util.isInBottom
 import com.xah.sample.ui.util.navigateAndSaveForTransition
 import com.xah.sample.ui.util.previousRoute
 import com.xah.sample.viewmodel.UIViewModel
@@ -292,6 +295,11 @@ fun CustomScaffold(
             show = false
             delay(ANIMATION_SPEED* 1L)
             show = true
+        } else if(show) {
+            if(navHostController.isInBottom(route)) {
+                return@LaunchedEffect
+            }
+            show = false
         }
     }
 
@@ -302,10 +310,20 @@ fun CustomScaffold(
         }
     }
     LaunchedEffect(isCurrentEntry,isPreviousEntry) {
-        if(!isCurrentEntry && !isPreviousEntry) {
-            show = false
-        }
-        println("route " + route + " | current "+ isCurrentEntry + "| previous" + " " + isPreviousEntry)
+//        if(isCurrentEntry && !isPreviousEntry) {
+            // 有两种可能
+            // 当前布局收起时父布局 应该保持show=true
+            // 当前布局展开时当前布局 应该延时显示
+            // 如何判断呢？
+//        } else if(!isCurrentEntry && isCurrentEntry) {
+            // 有两种可能
+            // 当前布局收起时当前布局 应该立刻show=false
+            // 当前布局展开时父布局 应该保持show=true
+//        }
+//        if(!isCurrentEntry && !isPreviousEntry) {
+//            show = false
+//        }
+        println("route $route | current $isCurrentEntry| previous $isPreviousEntry")
 //        if(isCurrentEntry) {
 //            if(show) {
 //                return@LaunchedEffect
@@ -340,7 +358,7 @@ fun CustomScaffold(
     ) { innerPadding ->
         AnimatedVisibility(
             visible = show,
-            enter  = if(MyAnimationManager.ANIMATION_SPEED == 0) fadeIn(tween(durationMillis = 0)) else fadeIn(),
+            enter  = if(ANIMATION_SPEED == 0) fadeIn(tween(durationMillis = 0)) else fadeIn(),
             exit = fadeOut(tween(durationMillis = 0))
         ) {
             content(innerPadding)

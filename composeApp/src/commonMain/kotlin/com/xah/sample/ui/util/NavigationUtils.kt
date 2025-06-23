@@ -39,8 +39,8 @@ fun NavController.previousRoute(): String? = this.previousBackStackEntry?.destin
 // 所有
 fun NavController.allRouteStack() : List<String> = this.currentBackStack.value.mapNotNull { it.destination.route }
 
-//@Composable
-//fun rememberIsPreviousHome(navController: NavController): Boolean {
-//   val d = navController.currentBackStack.collectAsState(initial = "")
-//}
-
+// 界面是否在栈底倒数
+fun NavController.isInBottom(route : String,lastIndex : Int = 2) : Boolean {
+    val stack = this.allRouteStack()
+    return stack.takeLast(lastIndex).contains(route)
+}

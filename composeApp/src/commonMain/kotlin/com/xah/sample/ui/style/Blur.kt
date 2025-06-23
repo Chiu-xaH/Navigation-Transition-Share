@@ -71,7 +71,8 @@ fun appBlur(
 }
 
 object TransitionState {
-    var currentRoute : String = ScreenRoute.HomeScreen.route
+    lateinit var currentRoute : String
+    lateinit var previousRoute : String
     var transplantBackground = false
 }
 

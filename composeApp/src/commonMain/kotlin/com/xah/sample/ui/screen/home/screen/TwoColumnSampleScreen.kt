@@ -8,7 +8,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -22,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -30,6 +34,7 @@ import animationsample.composeapp.generated.resources.deployed_code
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.SmallCard
+import com.xah.sample.ui.component.StyleCardListItem
 import com.xah.sample.ui.component.TransplantListItem
 import com.xah.sample.ui.screen.detail.lite.LiteScreen
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
@@ -145,6 +150,60 @@ fun TwoColumnSampleScreen(
             items(2) {
                 Spacer(
                     Modifier.height(innerPadding.calculateBottomPadding() + APP_HORIZONTAL_DP).navigationBarsPadding()
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun RSampleScreen(
+    vm: UIViewModel,
+    navController : NavHostController,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
+    boundsTransform: BoundsTransform,
+    onItemClick: (String) -> Unit,
+) {
+    // 用于回退时保存滑动位置
+    val route = ScreenRoute.ModuleScreen.route + "R" + 1
+    SharedTopBar(
+        vm,
+        title = "递归嵌套",
+        navController = navController,
+        sharedTransitionScope = sharedTransitionScope,
+        animatedContentScope = animatedContentScope,
+        boundsTransform
+    ) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            with(sharedTransitionScope) {
+                StyleCardListItem(
+                    headlineContent = { Text("进入递归") },
+                    leadingContent = {
+                        Icon(
+                            painterResource(Res.drawable.deployed_code),
+                            null,
+                            modifier = Modifier.sharedElement(
+                                boundsTransform = boundsTransform,
+                                sharedContentState = rememberSharedContentState(key = "title_$route"),
+                                animatedVisibilityScope = animatedContentScope,
+                            )
+                        )
+                    },
+                    cardModifier = Modifier.align(Alignment.Center).sharedBounds(
+                        boundsTransform = boundsTransform,
+                        enter = MyAnimationManager.fadeAnimation.enter,
+                        exit = MyAnimationManager.fadeAnimation.exit,
+                        sharedContentState = rememberSharedContentState(key = "container_$route"),
+                        animatedVisibilityScope = animatedContentScope,
+                        resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                    ),
+                    modifier = Modifier.clickable {
+                        onItemClick(route)
+                    },
+                    color = MaterialTheme.colorScheme.primaryContainer
+
                 )
             }
         }
