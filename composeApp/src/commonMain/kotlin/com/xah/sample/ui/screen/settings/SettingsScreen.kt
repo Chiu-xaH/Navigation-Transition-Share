@@ -17,7 +17,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -36,7 +35,6 @@ import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.animation
 import animationsample.composeapp.generated.resources.blur_off
 import animationsample.composeapp.generated.resources.blur_on
-import animationsample.composeapp.generated.resources.close
 import animationsample.composeapp.generated.resources.deployed_code
 import animationsample.composeapp.generated.resources.settings
 import animationsample.composeapp.generated.resources.swipe_left
@@ -48,7 +46,6 @@ import com.xah.sample.ui.component.TransplantListItem
 import com.xah.sample.ui.component.containerShare
 import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.style.topBarTransplantColor
-import com.xah.sample.ui.style.transitionBackground
 import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
 import com.xah.sample.ui.util.navigateAndSaveForTransition
@@ -85,19 +82,6 @@ fun SettingsScreen(
             boundsTransform = boundsTransform,
             animatedContentScope = animatedContentScope,
             vm = vm,
-//            modifier =
-//                Modifier.transitionBackground(navController, ScreenRoute.SettingsScreen.route,vm)
-//                .fillMaxSize()
-//                .sharedBounds(
-//                    boundsTransform = boundsTransform,
-//                    enter = MyAnimationManager.fadeAnimation.enter,
-//                    exit = MyAnimationManager.fadeAnimation.exit,
-//                    sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                    animatedVisibilityScope = animatedContentScope,
-//                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                )
-//                .skipToLookaheadSize()
-//            ,
             topBar = {
                 TopAppBar(
                     title = { Text("设置") },
@@ -108,24 +92,10 @@ fun SettingsScreen(
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                    Modifier.sharedElement(
-//                                    boundsTransform = boundsTransform,
-//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-//                                    animatedVisibilityScope = animatedContentScope,
-//                                )
                             )
                         }
                     },
                     colors = topBarTransplantColor(),
-                    actions = {
-                        IconButton (onClick = onBackPressed) {
-                            Icon(
-                                painterResource(Res.drawable.close),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                    }
                 )
             }
         ) { innerPadding ->
@@ -185,7 +155,7 @@ fun SettingsScreen(
                                 value = animationSpeed,
                                 onValueChange = {
                                     vm.animationSpeed = it
-                                    MyAnimationManager.ANIMATION_SPEED = it.toInt()
+                                    ANIMATION_SPEED = it.toInt()
                                 },
                                 colors = SliderDefaults.colors(
                                     thumbColor = MaterialTheme.colorScheme.secondary,
@@ -210,7 +180,7 @@ fun SettingsScreen(
                         trailingContent = {
                             Switch(enabled = false, checked = false, onCheckedChange = { })
                         },
-                        supportingContent = { Text("因和此页面某些组件测量冲突而关闭，需打开请自行修改清单文件")},
+                        supportingContent = { Text("加入预测式返回的动画反而不连贯，需打开请自行修改清单文件")},
                         modifier = Modifier.clickable { }
                     )
                 }
@@ -220,15 +190,6 @@ fun SettingsScreen(
                         val r = ScreenRoute.Module31Screen.route
                         TransplantListItem(
                             modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=r)
-//                                Modifier
-//                                .sharedBounds(
-//                                    boundsTransform = boundsTransform,
-//                                    enter = MyAnimationManager.fadeAnimation.enter,
-//                                    exit = MyAnimationManager.fadeAnimation.exit,
-//                                    sharedContentState = rememberSharedContentState(key = "container_$r"),
-//                                    animatedVisibilityScope = animatedContentScope,
-//                                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                                )
                                 .clickable {
                                     navController.navigateAndSaveForTransition(r)
                                 },
@@ -238,11 +199,6 @@ fun SettingsScreen(
                                     painterResource(Res.drawable.deployed_code),
                                     null,
                                     modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = r)
-//                                        Modifier.sharedElement(
-//                                        boundsTransform = boundsTransform,
-//                                        sharedContentState = rememberSharedContentState(key = "title_$r"),
-//                                        animatedVisibilityScope = animatedContentScope,
-//                                    )
                                 )
                             },
                             supportingContent = {

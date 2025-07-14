@@ -46,7 +46,6 @@ fun IconSampleScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     boundsTransform: BoundsTransform,
-    onItemClick: (String) -> Unit,
 ) {
     val func2 = remember {
         listOf(
@@ -66,7 +65,6 @@ fun IconSampleScreen(
     val scrollState = rememberScrollState()
 
     SharedTopBar(
-        vm,
         title = "图标与按钮",
         navController = navController,
         sharedTransitionScope = sharedTransitionScope,
@@ -84,25 +82,12 @@ fun IconSampleScreen(
                                 navController.navigateAndSaveForTransition(route,true)
                             },
                             modifier = containerShare(animatedContentScope = animatedContentScope, boundsTransform = boundsTransform, route = route, resize = true)
-//                                Modifier.sharedBounds(
-//                                boundsTransform = boundsTransform,
-//                                enter = MyAnimationManager.fadeAnimation.enter,
-//                                exit = MyAnimationManager.fadeAnimation.exit,
-//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                                animatedVisibilityScope = animatedContentScope,
-//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                            )
                         ) {
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                    Modifier.sharedElement(
-//                                    boundsTransform = boundsTransform,
-//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-//                                    animatedVisibilityScope = animatedContentScope,
-//                                )
                             )
                         }
                     }
@@ -114,14 +99,6 @@ fun IconSampleScreen(
                                 navController.navigateAndSaveForTransition(route,true)
                             },
                             modifier = containerShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                Modifier.sharedBounds(
-//                                boundsTransform = boundsTransform,
-//                                enter = MyAnimationManager.fadeAnimation.enter,
-//                                exit = MyAnimationManager.fadeAnimation.exit,
-//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                                animatedVisibilityScope = animatedContentScope,
-//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                            )
                         ) {
                             Text("按钮")
                         }
@@ -138,24 +115,11 @@ fun IconSampleScreen(
                                 navController.navigateAndSaveForTransition(route)
                             },
                             modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
-//                                Modifier.sharedBounds(
-//                                boundsTransform = boundsTransform,
-//                                enter = MyAnimationManager.fadeAnimation.enter,
-//                                exit = MyAnimationManager.fadeAnimation.exit,
-//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                                animatedVisibilityScope = animatedContentScope,
-//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                            )
                         ) {
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                    Modifier.sharedElement(
-//                                    boundsTransform = boundsTransform,
-//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-//                                    animatedVisibilityScope = animatedContentScope,
-//                                )
                             )
                         }
                     }

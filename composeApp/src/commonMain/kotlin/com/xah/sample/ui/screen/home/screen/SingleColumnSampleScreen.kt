@@ -35,7 +35,6 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SingleColumnSampleScreen(
-    vm: UIViewModel,
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
@@ -56,17 +55,6 @@ fun SingleColumnSampleScreen(
             ScreenRoute.Module8Screen.route,
             ScreenRoute.Module9Screen.route,
             ScreenRoute.Module10Screen.route,
-
-//            ScreenRoute.Module21Screen.route,
-//            ScreenRoute.Module22Screen.route,
-//            ScreenRoute.Module23Screen.route,
-//            ScreenRoute.Module24Screen.route,
-//            ScreenRoute.Module25Screen.route,
-//            ScreenRoute.Module26Screen.route,
-//            ScreenRoute.Module27Screen.route,
-//            ScreenRoute.Module28Screen.route,
-//            ScreenRoute.Module29Screen.route,
-//            ScreenRoute.Module30Screen.route,
         )
     }
     val func2 = remember {
@@ -85,7 +73,6 @@ fun SingleColumnSampleScreen(
     }
 
     SharedTopBar(
-        vm,
         title = "单列样式",
         navController = navController,
         sharedTransitionScope = sharedTransitionScope,
@@ -99,15 +86,6 @@ fun SingleColumnSampleScreen(
                 with(sharedTransitionScope) {
                     StyleCardListItem(
                         cardModifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
-//                            Modifier
-//                            .sharedBounds(
-//                                boundsTransform = boundsTransform,
-//                                enter = MyAnimationManager.fadeAnimation.enter,
-//                                exit = MyAnimationManager.fadeAnimation.exit,
-//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                                animatedVisibilityScope = animatedContentScope,
-//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                            )
                         ,
                         color = MaterialTheme.colorScheme.primaryContainer,
                         headlineContent = { Text(route) },
@@ -117,11 +95,6 @@ fun SingleColumnSampleScreen(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                    Modifier.sharedElement(
-//                                    boundsTransform = boundsTransform,
-//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-//                                    animatedVisibilityScope = animatedContentScope,
-//                                )
                             )
                         },
                         modifier = Modifier.clickable {
@@ -136,30 +109,15 @@ fun SingleColumnSampleScreen(
                 with(sharedTransitionScope) {
                     ListItem(
                         modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
-//                            Modifier
-//                            .sharedBounds(
-//                                boundsTransform = boundsTransform,
-//                                enter = MyAnimationManager.fadeAnimation.enter,
-//                                exit = MyAnimationManager.fadeAnimation.exit,
-//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                                animatedVisibilityScope = animatedContentScope,
-//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                            )
                             .clickable {
                                 onItemClick(route)
                             },
-//                        colors = MaterialTheme.colorScheme.secondaryContainer,
                         headlineContent = { Text(route) },
                         leadingContent = {
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                    Modifier.sharedElement(
-//                                    boundsTransform = boundsTransform,
-//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-//                                    animatedVisibilityScope = animatedContentScope,
-//                                )
                             )
                         },
                         supportingContent = {

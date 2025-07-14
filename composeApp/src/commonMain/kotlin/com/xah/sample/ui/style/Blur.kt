@@ -86,20 +86,12 @@ fun Modifier.transitionBackground(
         animationSpec = tween(ANIMATION_SPEED, easing = FastOutSlowInEasing)
     )
     // 蒙版 遮罩
-    if(transition && !transplantBackground)
+    if(
+//        transition &&
+        !transplantBackground)
         Box(modifier = Modifier.fillMaxSize().background(backgroundColor).zIndex(2f))
 
     val transitionModifier = if(transition) this.scale(scale.value).blur(blurSize) else this
-
-    // 延时固定时间后，显示UI
-//    LaunchedEffect(isExpanded) {
-//        if(isExpanded) {
-////             延时懒加载二级界面 减少因界面渲染和动画过程同步而掉帧
-//            vm.showSurface = false
-//            delay(ANIMATION_SPEED *1L)
-//            vm.showSurface = true
-//        }
-//    }
 
     return transitionModifier
 }

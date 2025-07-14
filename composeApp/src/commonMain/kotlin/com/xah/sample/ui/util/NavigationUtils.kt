@@ -21,9 +21,9 @@ fun NavController.navigateAndSave(route: String) {
 
 fun NavController.navigateAndSaveForTransition(route: String, transplantBackground : Boolean = false) {
     TransitionState.transplantBackground = transplantBackground
-    println("READY GO $route | CURRENT" + this.allRouteStack())
+//    println("READY GO $route | CURRENT" + this.allRouteStack())
     navigateAndSave(route)
-    println("GONE" + this.allRouteStack())
+//    println("GONE" + this.allRouteStack())
 }
 
 @Composable

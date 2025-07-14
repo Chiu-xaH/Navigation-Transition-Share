@@ -1,8 +1,5 @@
 package com.xah.sample.ui.component
 
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -77,28 +74,6 @@ fun HazeBottomSheetTopBar(
             singleLine,
             textModifier,
             rightContent
-        )
-    }
-}
-
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-fun SharedTopBar(
-    title: String,
-    key: String,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope
-) {
-    with(sharedTransitionScope) {
-        Text(
-            title,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.sharedBounds(
-                rememberSharedContentState(key = key),
-                animatedVisibilityScope = animatedContentScope
-            ).padding(APP_HORIZONTAL_DP+1.dp),
-            fontSize = 22.sp,
         )
     }
 }

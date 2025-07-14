@@ -42,7 +42,6 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun TwoColumnSampleScreen(
-    vm: UIViewModel,
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
@@ -87,7 +86,6 @@ fun TwoColumnSampleScreen(
     }
 
     SharedTopBar(
-        vm,
         title = "双列样式",
         navController = navController,
         sharedTransitionScope = sharedTransitionScope,
@@ -107,15 +105,6 @@ fun TwoColumnSampleScreen(
                 with(sharedTransitionScope) {
                     SmallCard(
                         modifier = containerShare(Modifier.padding(horizontal = 3.dp, vertical = 3.dp),animatedContentScope,boundsTransform,route)
-
-//                            .sharedBounds(
-//                                boundsTransform = boundsTransform,
-//                                enter = MyAnimationManager.fadeAnimation.enter,
-//                                exit = MyAnimationManager.fadeAnimation.exit,
-//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                                animatedVisibilityScope = animatedContentScope,
-//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                            )
                         ,
                         color = MaterialTheme.colorScheme.primaryContainer
                     ) {
@@ -126,11 +115,6 @@ fun TwoColumnSampleScreen(
                                     painterResource(Res.drawable.deployed_code),
                                     null,
                                     modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                        Modifier.sharedElement(
-//                                        boundsTransform = boundsTransform,
-//                                        sharedContentState = rememberSharedContentState(key = "title_$route"),
-//                                        animatedVisibilityScope = animatedContentScope,
-//                                    )
                                 )
                             },
                             modifier = Modifier.clickable {
@@ -168,7 +152,6 @@ fun RSampleScreen(
     // 用于回退时保存滑动位置
     val route = ScreenRoute.ModuleScreen.route + "R" + 1
     SharedTopBar(
-        vm,
         title = "递归嵌套",
         navController = navController,
         sharedTransitionScope = sharedTransitionScope,
@@ -184,22 +167,9 @@ fun RSampleScreen(
                             painterResource(Res.drawable.deployed_code),
                             null,
                             modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                Modifier.sharedElement(
-//                                boundsTransform = boundsTransform,
-//                                sharedContentState = rememberSharedContentState(key = "title_$route"),
-//                                animatedVisibilityScope = animatedContentScope,
-//                            )
                         )
                     },
                     cardModifier = containerShare(Modifier.align(Alignment.Center),animatedContentScope,boundsTransform,route, resize = true)
-//                        .sharedBounds(
-//                        boundsTransform = boundsTransform,
-//                        enter = MyAnimationManager.fadeAnimation.enter,
-//                        exit = MyAnimationManager.fadeAnimation.exit,
-//                        sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                        animatedVisibilityScope = animatedContentScope,
-//                        resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                    )
                     ,
                     modifier = Modifier.clickable {
                         onItemClick(route)

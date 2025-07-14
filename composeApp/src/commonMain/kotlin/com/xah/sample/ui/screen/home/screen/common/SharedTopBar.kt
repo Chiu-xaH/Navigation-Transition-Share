@@ -26,13 +26,11 @@ import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.style.topBarStyle
 import com.xah.sample.ui.style.topBarTransplantColor
 import com.xah.sample.ui.util.navigateAndSaveForTransition
-import com.xah.sample.viewmodel.UIViewModel
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTopBar(
-    vmUI : UIViewModel,
     title : String,
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
@@ -56,25 +54,12 @@ fun SharedTopBar(
                                 navController.navigateAndSaveForTransition(route,true)
                             },
                             modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
-//                                Modifier.sharedBounds(
-//                                boundsTransform = boundsTransform,
-//                                enter = MyAnimationManager.fadeAnimation.enter,
-//                                exit = MyAnimationManager.fadeAnimation.exit,
-//                                sharedContentState = rememberSharedContentState(key = "container_$route"),
-//                                animatedVisibilityScope = animatedContentScope,
-//                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-//                            )
                         ) {
                             Icon(
                                 painterResource(Res.drawable.settings),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
-//                                    Modifier.sharedElement(
-//                                    boundsTransform = boundsTransform,
-//                                    sharedContentState = rememberSharedContentState(key = "title_$route"),
-//                                    animatedVisibilityScope = animatedContentScope,
-//                                )
                             )
                         }
                     }

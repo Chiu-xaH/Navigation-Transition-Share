@@ -106,13 +106,13 @@ fun HomeScreen(
             exitTransition = { MyAnimationManager.centerAnimation.exit }
         ) {
             composable(HomeScreenRoute.TwoColumnSampleScreen.route) {
-                TwoColumnSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
+                TwoColumnSampleScreen(navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
             }
             composable(HomeScreenRoute.SingleColumnSampleScreen.route) {
-                SingleColumnSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
+                SingleColumnSampleScreen(navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
             }
             composable(HomeScreenRoute.IconSampleScreen.route) {
-                IconSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
+                IconSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform)
             }
             composable(HomeScreenRoute.RSampleScreen.route) {
                 RSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)

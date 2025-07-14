@@ -34,7 +34,7 @@ fun LiteScreen(index : Int) {
         leadingContent = {
             Icon(
                 painterResource(Res.drawable.deployed_code),
-                contentDescription = "Localized description",
+                contentDescription = null,
             )
         },
         modifier = Modifier.clickable {

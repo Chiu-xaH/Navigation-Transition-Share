@@ -52,13 +52,6 @@ fun SharedTransitionScope.CustomScaffold(
         route,
         resize = false
     ),
-//        .sharedBounds(
-//            boundsTransform = boundsTransform,
-//            enter = MyAnimationManager.fadeAnimation.enter,
-//            exit = MyAnimationManager.fadeAnimation.exit,
-//            sharedContentState = rememberSharedContentState(key = "container_$route"),
-//            animatedVisibilityScope = animatedContentScope,
-//        ),
     topBar: @Composable (() -> Unit) = {},
     bottomBar: @Composable (() -> Unit) = {},
     floatingActionButton: @Composable (() -> Unit) = {},
@@ -92,9 +85,6 @@ fun SharedTransitionScope.CustomScaffold(
             show = true
         }
     }
-//    LaunchedEffect(isCurrentEntry,isPreviousEntry) {
-//        println("route $route | current $isCurrentEntry| previous $isPreviousEntry")
-//    }
 
     Scaffold(
         containerColor = containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface,

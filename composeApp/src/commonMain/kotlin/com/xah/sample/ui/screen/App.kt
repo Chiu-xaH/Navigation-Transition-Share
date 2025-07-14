@@ -1,29 +1,14 @@
 package com.xah.sample.ui.screen
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.Spring.StiffnessMediumLow
-import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -33,12 +18,9 @@ import com.xah.sample.ui.screen.detail.DetailScreenR
 import com.xah.sample.ui.screen.home.HomeScreen
 import com.xah.sample.ui.screen.settings.SettingsScreen
 import com.xah.sample.ui.util.MyAnimationManager
-import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
 import com.xah.sample.ui.util.allRouteStack
-import com.xah.sample.ui.util.isCurrentRoute
 import com.xah.sample.ui.util.navigateAndSaveForTransition
 import com.xah.sample.viewmodel.UIViewModel
-import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

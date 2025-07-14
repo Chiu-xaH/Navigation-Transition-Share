@@ -14,7 +14,7 @@ Wasm(JS)、Desktop(JVM)、iOS、Android
 ```
 
 ## 计划
-打开动画因Navigation而差异的优化、简易化的封装、仿IOS的顶栏转场...
+开启增强动画时的流畅度优化、打开动画因Navigation而差异的优化、封装成库...
 
 ### 演示
 ![截图](/src/shot.jpg)
