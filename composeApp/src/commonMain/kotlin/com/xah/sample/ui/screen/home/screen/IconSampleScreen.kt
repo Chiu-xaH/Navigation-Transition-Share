@@ -1,7 +1,6 @@
 package com.xah.sample.ui.screen.home.screen
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Column
@@ -30,22 +29,20 @@ import animationsample.composeapp.generated.resources.deployed_code
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.DividerTextExpandedWith
-import com.xah.sample.ui.component.containerShare
-import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
 import com.xah.sample.ui.style.RowHorizontal
-import com.xah.sample.ui.util.navigateAndSaveForTransition
 import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.component.containerShare
+import com.xah.transition.component.iconElementShare
+import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun IconSampleScreen(
-    vm: UIViewModel,
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
 ) {
     val func2 = remember {
         listOf(
@@ -69,11 +66,10 @@ fun IconSampleScreen(
         navController = navController,
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        boundsTransform
     ) { innerPadding ->
         Column(modifier = Modifier.verticalScroll(scrollState)) {
             Spacer(Modifier.height(innerPadding.calculateTopPadding()).statusBarsPadding())
-            DividerTextExpandedWith("无边框按钮",vm) {
+            DividerTextExpandedWith("无边框按钮") {
                 RowHorizontal(modifier = Modifier.fillMaxWidth()) {
                     with(sharedTransitionScope) {
                         val route = func2[0]
@@ -81,13 +77,13 @@ fun IconSampleScreen(
                             onClick = {
                                 navController.navigateAndSaveForTransition(route,true)
                             },
-                            modifier = containerShare(animatedContentScope = animatedContentScope, boundsTransform = boundsTransform, route = route, resize = true)
+                            modifier = containerShare(animatedContentScope = animatedContentScope, route = route, resize = true)
                         ) {
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                modifier =iconElementShare(animatedContentScope=animatedContentScope, route = route)
                             )
                         }
                     }
@@ -98,14 +94,14 @@ fun IconSampleScreen(
                             onClick = {
                                 navController.navigateAndSaveForTransition(route,true)
                             },
-                            modifier = containerShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                            modifier = containerShare(animatedContentScope=animatedContentScope, route = route)
                         ) {
                             Text("按钮")
                         }
                     }
                 }
             }
-            DividerTextExpandedWith("有边框按钮",vm) {
+            DividerTextExpandedWith("有边框按钮") {
                 RowHorizontal(modifier = Modifier.fillMaxWidth())  {
                     with(sharedTransitionScope) {
                         val route = func2[5]
@@ -114,12 +110,12 @@ fun IconSampleScreen(
                             onClick = {
                                 navController.navigateAndSaveForTransition(route)
                             },
-                            modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
+                            modifier = containerShare(animatedContentScope=animatedContentScope,route=route)
                         ) {
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope,  route = route)
                             )
                         }
                     }

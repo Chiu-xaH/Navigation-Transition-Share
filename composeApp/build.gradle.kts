@@ -79,7 +79,8 @@ kotlin {
             // 自适应横竖屏布局
             implementation(libs.material3.adaptive.navigation.suite)
             // HAZE模糊
-            implementation(libs.haze)
+//            implementation(libs.haze)
+            implementation(project(":transition"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

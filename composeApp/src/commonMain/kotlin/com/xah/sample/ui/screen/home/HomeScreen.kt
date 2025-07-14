@@ -1,7 +1,6 @@
 package com.xah.sample.ui.screen.home
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,21 +28,19 @@ import com.xah.sample.ui.screen.home.screen.IconSampleScreen
 import com.xah.sample.ui.screen.home.screen.RSampleScreen
 import com.xah.sample.ui.screen.home.screen.SingleColumnSampleScreen
 import com.xah.sample.ui.screen.home.screen.TwoColumnSampleScreen
-import com.xah.sample.ui.style.transitionBackground
 import com.xah.sample.ui.util.MyAnimationManager
-import com.xah.sample.ui.util.navigateAndSaveForTransition
 import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.style.transitionBackground
+import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.resources.painterResource
 
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    vm: UIViewModel,
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
     onItemClick: (String) -> Unit,
 ) {
     val barItems = listOf(
@@ -80,7 +77,7 @@ fun HomeScreen(
         modifier =
 //            if(firstStart) Modifier else
             Modifier.
-            transitionBackground(navController, ScreenRoute.HomeScreen.route,vm),
+            transitionBackground(navController, ScreenRoute.HomeScreen.route),
         navigationSuiteItems =  {
             barItems.forEach { item ->
                 val route = item.route
@@ -102,20 +99,20 @@ fun HomeScreen(
         NavHost(
             navController = navControllerHome,
             startDestination = firstScreen,
-            enterTransition = { MyAnimationManager.centerAnimation.enter },
-            exitTransition = { MyAnimationManager.centerAnimation.exit }
+            enterTransition = { MyAnimationManager.getCenterAnimation().enter },
+            exitTransition = { MyAnimationManager.getCenterAnimation().exit }
         ) {
             composable(HomeScreenRoute.TwoColumnSampleScreen.route) {
-                TwoColumnSampleScreen(navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
+                TwoColumnSampleScreen(navController,sharedTransitionScope,animatedContentScope,onItemClick)
             }
             composable(HomeScreenRoute.SingleColumnSampleScreen.route) {
-                SingleColumnSampleScreen(navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
+                SingleColumnSampleScreen(navController,sharedTransitionScope,animatedContentScope,onItemClick)
             }
             composable(HomeScreenRoute.IconSampleScreen.route) {
-                IconSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform)
+                IconSampleScreen(navController,sharedTransitionScope,animatedContentScope)
             }
             composable(HomeScreenRoute.RSampleScreen.route) {
-                RSampleScreen(vm,navController,sharedTransitionScope,animatedContentScope,boundsTransform,onItemClick)
+                RSampleScreen(navController,sharedTransitionScope,animatedContentScope,onItemClick)
             }
         }
     }

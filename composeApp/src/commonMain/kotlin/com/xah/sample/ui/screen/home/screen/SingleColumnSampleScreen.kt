@@ -1,7 +1,6 @@
 package com.xah.sample.ui.screen.home.screen
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
@@ -26,10 +25,9 @@ import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.CARD_NORMAL_DP
 import com.xah.sample.ui.component.StyleCardListItem
-import com.xah.sample.ui.component.containerShare
-import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
-import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.component.containerShare
+import com.xah.transition.component.iconElementShare
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -38,7 +36,6 @@ fun SingleColumnSampleScreen(
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
     onItemClick: (String) -> Unit,
 ) {
     // 用于回退时保存滑动位置
@@ -77,7 +74,6 @@ fun SingleColumnSampleScreen(
         navController = navController,
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        boundsTransform
     ) { innerPadding ->
         LazyColumn(state = scrollState) {
             item { Spacer(Modifier.height(innerPadding.calculateTopPadding()).statusBarsPadding()) }
@@ -85,7 +81,7 @@ fun SingleColumnSampleScreen(
                 val route = func[index]
                 with(sharedTransitionScope) {
                     StyleCardListItem(
-                        cardModifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
+                        cardModifier = containerShare(animatedContentScope=animatedContentScope,route=route)
                         ,
                         color = MaterialTheme.colorScheme.primaryContainer,
                         headlineContent = { Text(route) },
@@ -94,7 +90,7 @@ fun SingleColumnSampleScreen(
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
-                                modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                modifier =iconElementShare(animatedContentScope=animatedContentScope,  route = route)
                             )
                         },
                         modifier = Modifier.clickable {
@@ -108,7 +104,7 @@ fun SingleColumnSampleScreen(
                 val route = func2[index]
                 with(sharedTransitionScope) {
                     ListItem(
-                        modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
+                        modifier = containerShare(animatedContentScope=animatedContentScope,route=route)
                             .clickable {
                                 onItemClick(route)
                             },
@@ -117,7 +113,7 @@ fun SingleColumnSampleScreen(
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope,  route = route)
                             )
                         },
                         supportingContent = {

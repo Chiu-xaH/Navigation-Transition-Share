@@ -1,9 +1,9 @@
-package com.xah.sample.ui.util
+package com.xah.transition.util
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.xah.sample.ui.style.TransitionState
+import com.xah.transition.state.TransitionState
 
 fun NavController.navigateAndClear(route: String) {
     navigate(route) {
@@ -20,6 +20,7 @@ fun NavController.navigateAndSave(route: String) {
 }
 
 fun NavController.navigateAndSaveForTransition(route: String, transplantBackground : Boolean = false) {
+    // 禁用背景透明
     TransitionState.transplantBackground = transplantBackground
 //    println("READY GO $route | CURRENT" + this.allRouteStack())
     navigateAndSave(route)

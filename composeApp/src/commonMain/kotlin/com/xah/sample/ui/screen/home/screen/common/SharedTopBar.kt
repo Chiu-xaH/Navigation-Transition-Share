@@ -1,7 +1,6 @@
 package com.xah.sample.ui.screen.home.screen.common
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,11 +20,11 @@ import androidx.navigation.NavHostController
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.settings
 import com.xah.sample.logic.model.ui.ScreenRoute
-import com.xah.sample.ui.component.containerShare
-import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.style.topBarStyle
 import com.xah.sample.ui.style.topBarTransplantColor
-import com.xah.sample.ui.util.navigateAndSaveForTransition
+import com.xah.transition.component.containerShare
+import com.xah.transition.component.iconElementShare
+import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -35,7 +34,6 @@ fun SharedTopBar(
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
     content : @Composable ((PaddingValues) -> Unit)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -53,13 +51,13 @@ fun SharedTopBar(
                             onClick = {
                                 navController.navigateAndSaveForTransition(route,true)
                             },
-                            modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=route)
+                            modifier = containerShare(animatedContentScope=animatedContentScope,route=route)
                         ) {
                             Icon(
                                 painterResource(Res.drawable.settings),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, route = route)
                             )
                         }
                     }

@@ -1,7 +1,6 @@
 package com.xah.sample.ui.screen.detail
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
@@ -20,34 +19,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import animationsample.composeapp.generated.resources.Res
-import animationsample.composeapp.generated.resources.close
 import animationsample.composeapp.generated.resources.deployed_code
 import com.xah.sample.logic.model.ui.ScreenRoute
-import com.xah.sample.ui.component.CustomScaffold
 import com.xah.sample.ui.component.StyleCardListItem
-import com.xah.sample.ui.component.containerShare
-import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.style.topBarTransplantColor
-import com.xah.sample.ui.util.navigateAndSaveForTransition
-import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.component.TransitionScaffold
+import com.xah.transition.component.containerShare
+import com.xah.transition.component.iconElementShare
+import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
-    vm: UIViewModel,
     navHostController: NavHostController,
     route : String,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
     onBackPressed: () -> Unit
 ) {
     with(sharedTransitionScope) {
-        CustomScaffold (
+        TransitionScaffold (
             route = route,
-            vm = vm,
-            boundsTransform = boundsTransform,
             animatedContentScope = animatedContentScope,
             navHostController = navHostController,
             topBar = {
@@ -58,21 +51,15 @@ fun DetailScreen(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, route = route)
                             )
                         }
                     },
-                    title = { Text(route) },
+                    title = { Text(
+                        route,
+//                        modifier = titleElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                        ) },
                     colors = topBarTransplantColor(),
-                    actions = {
-                        IconButton (onClick = onBackPressed) {
-                            Icon(
-                                painterResource(Res.drawable.close),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                )
-                        }
-                    }
                 )
             }
         ) { innerPadding ->
@@ -89,22 +76,18 @@ fun DetailScreen(
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreenR(
-    vm: UIViewModel,
     navHostController: NavHostController,
     routeI : Int,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
 ) {
     val onBackPressed = {
         navHostController.popBackStack()
     }
     val route = ScreenRoute.ModuleScreen.route + "R"+ routeI
     with(sharedTransitionScope) {
-        CustomScaffold (
+        TransitionScaffold (
             route = route,
-            vm = vm,
-            boundsTransform = boundsTransform,
             animatedContentScope = animatedContentScope,
             navHostController = navHostController,
             topBar = {
@@ -115,21 +98,12 @@ fun DetailScreenR(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                modifier =iconElementShare(animatedContentScope=animatedContentScope,route = route)
                             )
                         }
                     },
                     title = { Text(route) },
                     colors = topBarTransplantColor(),
-                    actions = {
-                        IconButton (onClick = { onBackPressed() }) {
-                            Icon(
-                                painterResource(Res.drawable.close),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                    }
                 )
             }
         ) { innerPadding ->
@@ -143,10 +117,10 @@ fun DetailScreenR(
                         },
                         leadingContent = {
                             Icon(painterResource(Res.drawable.deployed_code),null,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = newRoute)
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, route = newRoute)
                     )
                         },
-                        cardModifier =  containerShare(Modifier.align(Alignment.Center),animatedContentScope,boundsTransform,newRoute, resize = true),
+                        cardModifier =  containerShare(Modifier.align(Alignment.Center),animatedContentScope,newRoute, resize = true),
                         color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier.clickable {
                             navHostController.navigateAndSaveForTransition(newRoute)

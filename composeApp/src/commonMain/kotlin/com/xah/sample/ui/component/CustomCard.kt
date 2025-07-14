@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xah.sample.ui.style.appBlur
-import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
 import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.state.TransitionState
 
 @Composable
 fun MyCustomCard(
@@ -153,7 +153,7 @@ fun AnimationCardListItem(
     LaunchedEffect(index) {
         animatedProgress.animateTo(
             targetValue = 1f,
-            animationSpec = tween(ANIMATION_SPEED, easing = EaseInOutQuad)
+            animationSpec = tween(TransitionState.curveStyle.speedMs, easing = EaseInOutQuad)
         )
     }
     StyleCardListItem(
@@ -184,7 +184,7 @@ fun AnimationCustomCard(
     LaunchedEffect(index) {
         animatedProgress.animateTo(
             targetValue = 1f,
-            animationSpec = tween(ANIMATION_SPEED, easing = EaseInOutQuad)
+            animationSpec = tween(TransitionState.curveStyle.speedMs, easing = EaseInOutQuad)
         )
     }
 
@@ -276,7 +276,7 @@ fun LoadingLargeCard(
     color : CardColors = CardDefaults.cardColors(containerColor = largeCardColor()),
     content: @Composable () -> Unit
 ) {
-    val speed = ANIMATION_SPEED / 2
+    val speed = TransitionState.curveStyle.speedMs / 2
     val scale = animateFloatAsState(
         targetValue = if (loading) 0.9f else 1f, // 按下时为0.9，松开时为1
         //animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
@@ -297,7 +297,7 @@ fun LoadingLargeCard(
         colors = color
     ) {
         //下面的内容
-        Column (modifier = appBlur(vm,loading).scale(scale.value)) {
+        Column (modifier = appBlur(loading).scale(scale.value)) {
             TransplantListItem(
                 headlineContent = {
                     Text(

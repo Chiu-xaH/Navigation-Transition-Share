@@ -1,7 +1,6 @@
 package com.xah.sample.ui.screen.settings
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
@@ -25,9 +24,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -40,48 +40,56 @@ import animationsample.composeapp.generated.resources.settings
 import animationsample.composeapp.generated.resources.swipe_left
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.logic.util.CAN_MOTION_BLUR
-import com.xah.sample.ui.component.CustomScaffold
 import com.xah.sample.ui.component.DividerTextExpandedWith
 import com.xah.sample.ui.component.TransplantListItem
-import com.xah.sample.ui.component.containerShare
-import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.style.topBarTransplantColor
 import com.xah.sample.ui.util.MyAnimationManager
-import com.xah.sample.ui.util.MyAnimationManager.ANIMATION_SPEED
-import com.xah.sample.ui.util.navigateAndSaveForTransition
-import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.component.TransitionScaffold
+import com.xah.transition.component.containerShare
+import com.xah.transition.component.iconElementShare
+import com.xah.transition.state.TransitionState
+import com.xah.transition.style.DefaultTransitionStyle
+import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    vm : UIViewModel,
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
     onBackPressed: () -> Unit
 ) {
     val route = remember { ScreenRoute.SettingsScreen.route }
-    val motionBlur by remember { derivedStateOf { vm.motionBlur } }
-    val forceAnimation by remember { derivedStateOf { vm.forceAnimation } }
-    val isCenterAnimation by remember { derivedStateOf { vm.isCenterAnimation } }
-    val animationSpeed by remember { derivedStateOf { vm.animationSpeed } }
+    var motionBlur by remember { mutableStateOf(TransitionState.transitionBackgroundStyle.motionBlur) }
+    LaunchedEffect(motionBlur) {
+        TransitionState.transitionBackgroundStyle.motionBlur = motionBlur
+    }
 
+    var forceAnimation by remember { mutableStateOf(TransitionState.transitionBackgroundStyle.forceTransition) }
+    LaunchedEffect(forceAnimation) {
+         TransitionState.transitionBackgroundStyle.forceTransition = forceAnimation
+    }
+
+    var isCenterAnimation by remember { mutableStateOf((TransitionState.curveStyle.boundsTransform != DefaultTransitionStyle.defaultBoundsTransform)) }
     LaunchedEffect(isCenterAnimation) {
         if(!isCenterAnimation) {
-            vm.animationSpeed = MyAnimationManager.DEFAULT_ANIMATION_SPEED.toFloat()
-            ANIMATION_SPEED = MyAnimationManager.DEFAULT_ANIMATION_SPEED
+            // 恢复默认速度
+            TransitionState.curveStyle.speedMs = DefaultTransitionStyle.DEFAULT_ANIMATION_SPEED
         }
+        TransitionState.curveStyle.boundsTransform = if(!isCenterAnimation) DefaultTransitionStyle.defaultBoundsTransform else MyAnimationManager.getCenterBoundsTransform()
+    }
+
+    var animationSpeed by remember { mutableStateOf(TransitionState.curveStyle.speedMs.toFloat()) }
+    LaunchedEffect(animationSpeed) {
+        TransitionState.curveStyle.speedMs = animationSpeed.toInt()
     }
 
     with(sharedTransitionScope) {
-        CustomScaffold(
+        TransitionScaffold(
             route = route,
             navHostController = navController,
-            boundsTransform = boundsTransform,
             animatedContentScope = animatedContentScope,
-            vm = vm,
             topBar = {
                 TopAppBar(
                     title = { Text("设置") },
@@ -91,7 +99,7 @@ fun SettingsScreen(
                                 painterResource(Res.drawable.settings),
                                 null,
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                modifier = iconElementShare(animatedContentScope=animatedContentScope, route = route)
                             )
                         }
                     },
@@ -104,48 +112,51 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
             ){
-                DividerTextExpandedWith("模糊",vm) {
+                DividerTextExpandedWith("模糊") {
                     TransplantListItem(
                         headlineContent = { Text("运动模糊") },
                         leadingContent = {
                             Icon(painterResource(if(motionBlur) Res.drawable.blur_on else Res.drawable.blur_off),null)
                         },
                         trailingContent = {
-                            Switch(enabled = CAN_MOTION_BLUR, checked = motionBlur, onCheckedChange = { vm.motionBlur = !motionBlur })
+                            Switch(enabled = CAN_MOTION_BLUR, checked = motionBlur, onCheckedChange = { motionBlur = !motionBlur })
                         },
                         supportingContent = { Text("一些组件在运动中会伴随模糊效果" + if(CAN_MOTION_BLUR) "(Android 12+)" else "")},
-                        modifier = Modifier.clickable { vm.motionBlur = !motionBlur }
+                        modifier = Modifier.clickable { motionBlur = !motionBlur }
                     )
                 }
-                DividerTextExpandedWith("动效",vm) {
+                DividerTextExpandedWith("动效") {
                     TransplantListItem(
                         headlineContent = { Text("增强转场动画") },
                         leadingContent = {
                             Icon(painterResource(Res.drawable.animation),null)
                         },
                         trailingContent = {
-                            Switch(checked = forceAnimation, onCheckedChange = { vm.forceAnimation = !forceAnimation })
+                            Switch(checked = forceAnimation, onCheckedChange = { forceAnimation = !forceAnimation })
                         },
                         supportingContent = { Text("转场时启用背景模糊和缩放")},
-                        modifier = Modifier.clickable { vm.forceAnimation = !forceAnimation }
+                        modifier = Modifier.clickable { forceAnimation = !forceAnimation }
                     )
                     TransplantListItem(
                         headlineContent = { Text(text = "动画曲线") },
                         supportingContent = {
                             Row {
                                 FilterChip(
-                                    onClick = { vm.isCenterAnimation = true },
+                                    onClick = {
+                                        // 暂时停用
+                                        isCenterAnimation = true
+                                    },
                                     label = { Text(text = "向中间运动") }, selected = isCenterAnimation
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 FilterChip(
-                                    onClick = { vm.isCenterAnimation = false },
+                                    onClick = { isCenterAnimation = false },
                                     label = { Text(text = "直接展开") }, selected = !isCenterAnimation
                                 )
                             }
                         },
                         leadingContent = { Icon(painterResource(Res.drawable.deployed_code), null) },
-                        modifier = Modifier.clickable { vm.isCenterAnimation = !isCenterAnimation }
+                        modifier = Modifier.clickable { isCenterAnimation = !isCenterAnimation }
                     )
                     TransplantListItem(
                         headlineContent = { Text(text = "动画时长 ${animationSpeed.toInt()}ms") },
@@ -154,16 +165,15 @@ fun SettingsScreen(
                                 enabled = isCenterAnimation,
                                 value = animationSpeed,
                                 onValueChange = {
-                                    vm.animationSpeed = it
-                                    ANIMATION_SPEED = it.toInt()
+                                    animationSpeed = it
                                 },
                                 colors = SliderDefaults.colors(
                                     thumbColor = MaterialTheme.colorScheme.secondary,
                                     activeTrackColor = MaterialTheme.colorScheme.secondary,
                                     inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
                                 ),
-                                steps = MyAnimationManager.DEFAULT_ANIMATION_SPEED*4-1,
-                                valueRange = 0f..MyAnimationManager.DEFAULT_ANIMATION_SPEED*4f,
+                                steps = DefaultTransitionStyle.DEFAULT_ANIMATION_SPEED*4-1,
+                                valueRange = 0f..DefaultTransitionStyle.DEFAULT_ANIMATION_SPEED*4f,
                                 modifier = Modifier.padding(horizontal = 25.dp)
                             )
                         },
@@ -171,7 +181,7 @@ fun SettingsScreen(
                         modifier = Modifier.clickable {  }
                     )
                 }
-                DividerTextExpandedWith("其它",vm) {
+                DividerTextExpandedWith("其它") {
                     TransplantListItem(
                         headlineContent = { Text("预测式返回") },
                         leadingContent = {
@@ -184,12 +194,12 @@ fun SettingsScreen(
                         modifier = Modifier.clickable { }
                     )
                 }
-                DividerTextExpandedWith("三级界面",vm) {
+                DividerTextExpandedWith("三级界面") {
                     with(sharedTransitionScope) {
 
                         val r = ScreenRoute.Module31Screen.route
                         TransplantListItem(
-                            modifier = containerShare(animatedContentScope=animatedContentScope,boundsTransform=boundsTransform,route=r)
+                            modifier = containerShare(animatedContentScope=animatedContentScope,route=r)
                                 .clickable {
                                     navController.navigateAndSaveForTransition(r)
                                 },
@@ -198,7 +208,7 @@ fun SettingsScreen(
                                 Icon(
                                     painterResource(Res.drawable.deployed_code),
                                     null,
-                                    modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = r)
+                                    modifier = iconElementShare(animatedContentScope=animatedContentScope, route = r)
                                 )
                             },
                             supportingContent = {

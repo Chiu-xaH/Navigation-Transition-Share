@@ -32,6 +32,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.state.TransitionState
 
 // 小标题
 @Composable
@@ -39,7 +40,7 @@ fun DividerText(text: String, onClick: (() -> Unit?)? = null) {
     var isPressed by remember { mutableStateOf(false) }
     val scale = animateFloatAsState(
         targetValue = if (isPressed) 0.9f else 1f, // 按下时为0.9，松开时为1
-        animationSpec = tween(MyAnimationManager.ANIMATION_SPEED / 2, easing = LinearOutSlowInEasing),
+        animationSpec = tween(TransitionState.curveStyle.speedMs / 2, easing = LinearOutSlowInEasing),
         label = "" // 使用弹簧动画
     )
     val color by animateColorAsState(
@@ -73,16 +74,15 @@ fun DividerText(text: String, onClick: (() -> Unit?)? = null) {
 @Composable
 fun DividerTextExpandedWith(
     text : String,
-    vm : UIViewModel,
     openBlurAnimation : Boolean = true,
     defaultIsExpanded : Boolean = true,
     content: @Composable () -> Unit
 ) {
 
 
-    val speed = MyAnimationManager.ANIMATION_SPEED
+    val speed = TransitionState.curveStyle.speedMs
 
-    val motionBlur = vm.motionBlur
+    val motionBlur = TransitionState.transitionBackgroundStyle.motionBlur
 
     var expanded by remember { mutableStateOf(defaultIsExpanded) }
     fun set() {

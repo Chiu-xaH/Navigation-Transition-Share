@@ -1,7 +1,6 @@
 package com.xah.sample.ui.screen.home.screen
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
@@ -32,11 +31,10 @@ import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.SmallCard
 import com.xah.sample.ui.component.StyleCardListItem
 import com.xah.sample.ui.component.TransplantListItem
-import com.xah.sample.ui.component.containerShare
-import com.xah.sample.ui.component.iconElementShare
 import com.xah.sample.ui.screen.detail.lite.LiteScreen
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
-import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.component.containerShare
+import com.xah.transition.component.iconElementShare
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -45,7 +43,6 @@ fun TwoColumnSampleScreen(
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
     onItemClick: (String) -> Unit,
 ) {
     // 用于回退时保存滑动位置
@@ -90,7 +87,6 @@ fun TwoColumnSampleScreen(
         navController = navController,
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        boundsTransform
     ) { innerPadding ->
         LazyVerticalGrid(
             state = scrollState,
@@ -104,17 +100,19 @@ fun TwoColumnSampleScreen(
                 val route = func[index]
                 with(sharedTransitionScope) {
                     SmallCard(
-                        modifier = containerShare(Modifier.padding(horizontal = 3.dp, vertical = 3.dp),animatedContentScope,boundsTransform,route)
+                        modifier = containerShare(Modifier.padding(horizontal = 3.dp, vertical = 3.dp),animatedContentScope,route)
                         ,
                         color = MaterialTheme.colorScheme.primaryContainer
                     ) {
                         TransplantListItem(
-                            headlineContent = { Text(route) },
+                            headlineContent = { Text(
+                                route,
+                                ) },
                             leadingContent = {
                                 Icon(
                                     painterResource(Res.drawable.deployed_code),
                                     null,
-                                    modifier = iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                                    modifier = iconElementShare(animatedContentScope=animatedContentScope, route = route)
                                 )
                             },
                             modifier = Modifier.clickable {
@@ -142,11 +140,9 @@ fun TwoColumnSampleScreen(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun RSampleScreen(
-    vm: UIViewModel,
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    boundsTransform: BoundsTransform,
     onItemClick: (String) -> Unit,
 ) {
     // 用于回退时保存滑动位置
@@ -156,7 +152,6 @@ fun RSampleScreen(
         navController = navController,
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        boundsTransform
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
             with(sharedTransitionScope) {
@@ -166,10 +161,10 @@ fun RSampleScreen(
                         Icon(
                             painterResource(Res.drawable.deployed_code),
                             null,
-                            modifier =iconElementShare(animatedContentScope=animatedContentScope, boundsTransform = boundsTransform, route = route)
+                            modifier =iconElementShare(animatedContentScope=animatedContentScope, route = route)
                         )
                     },
-                    cardModifier = containerShare(Modifier.align(Alignment.Center),animatedContentScope,boundsTransform,route, resize = true)
+                    cardModifier = containerShare(Modifier.align(Alignment.Center),animatedContentScope,route, resize = true)
                     ,
                     modifier = Modifier.clickable {
                         onItemClick(route)
