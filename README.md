@@ -1,6 +1,6 @@
-# Animation Sample
+# Transition Sample On Compose Multiplatform
 
-使用Kotlin Multiplatform和Compose Multiplatform创建的一个转场动画过渡示例，用于测试自用，然后封装
+使用Compose Multiplatform创建的一个转场动画过渡示例
 
 ## 平台
 Wasm(JS)、Desktop(JVM)、iOS、Android
