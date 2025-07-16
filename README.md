@@ -14,10 +14,14 @@ Wasm(JS)、Desktop(JVM)、iOS、Android
 ```
 
 ## 计划
-开启增强动画时的流畅度优化、打开动画因Navigation而差异的优化、封装成库...
+开启增强动画时的流畅度优化、打开动画因Navigation而差异的优化、继续优化封装成库...
 
 ### 演示
 ![截图](/src/shot.jpg)
+
+### 实用 在[APP](https://github.com/Chiu-xaH/HFUT-Schedule)上的效果(暂时阉割模糊、缩放、阴影等)
+
+![截图](/src/HFUT-Schedule%20Sample.jpg)
 
 ### 模块 :transition Import后。配置 TransitionState
 ```Kotlin

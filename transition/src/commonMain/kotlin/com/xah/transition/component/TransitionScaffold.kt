@@ -34,7 +34,6 @@ fun SharedTransitionScope.TransitionScaffold(
     animatedContentScope: AnimatedContentScope,
     route: String,
     navHostController : NavHostController,
-//    transitionBackgroundStyle : TransitionBackgroundStyle = TransitionBackgroundStyle(),
     modifier: Modifier = containerShare(
         Modifier.fillMaxSize()
             .transitionBackground(navHostController, route)
