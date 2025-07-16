@@ -82,7 +82,15 @@ fun SharedTransitionScope.TransitionScaffold(
         containerColor = containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface,
         modifier = modifier,
         topBar = topBar,
-        bottomBar = bottomBar,
+        bottomBar = {
+            AnimatedVisibility(
+                visible = show,
+                enter  = if(speed == 0) fadeIn(tween(durationMillis = 0)) else fadeIn(),
+                exit = fadeOut(tween(durationMillis = 0))
+            ) {
+                bottomBar()
+            }
+        },
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,
     ) { innerPadding ->

@@ -61,11 +61,11 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.kotlin.stdlib)
-//                implementation(compose.runtime)
-                implementation(compose.foundation)
                 implementation(libs.navigation.compose)
                 implementation(compose.material3)
+//                implementation(libs.kotlin.stdlib)
+//                implementation(compose.runtime)
+//                implementation(compose.foundation)
 //                implementation(compose.ui)
                 // Add KMP dependencies here
             }

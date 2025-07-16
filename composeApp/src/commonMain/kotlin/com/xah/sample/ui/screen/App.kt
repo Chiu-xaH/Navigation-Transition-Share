@@ -5,6 +5,7 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -16,6 +17,7 @@ import com.xah.sample.ui.screen.detail.DetailScreenR
 import com.xah.sample.ui.screen.home.HomeScreen
 import com.xah.sample.ui.screen.settings.SettingsScreen
 import com.xah.sample.viewmodel.UIViewModel
+import com.xah.transition.state.TransitionState
 import com.xah.transition.style.DefaultTransitionStyle
 import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -23,6 +25,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
+    LaunchedEffect(Unit) {
+        TransitionState.firstStartRoute = ScreenRoute.HomeScreen.route
+    }
 //    val vm = remember { UIViewModel() }
     MaterialTheme {
         AppNavHost()

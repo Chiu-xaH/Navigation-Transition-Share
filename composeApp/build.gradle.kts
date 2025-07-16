@@ -78,6 +78,9 @@ kotlin {
             implementation(libs.navigation.compose)
             // 自适应横竖屏布局
             implementation(libs.material3.adaptive.navigation.suite)
+            // DataStore
+//            implementation(libs.androidx.datastore.preferences)
+//            implementation(libs.androidx.datastore)
             // HAZE模糊
 //            implementation(libs.haze)
             implementation(project(":transition"))

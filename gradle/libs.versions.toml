@@ -22,8 +22,11 @@ accompanistSystemuicontroller = "0.31.0-alpha"
 kotlinStdlib = "2.1.21"
 runner = "1.6.2"
 core = "1.6.1"
+datastorePreferences = "1.1.7"
+
 
 [libraries]
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
@@ -44,6 +47,8 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+
 
 
 [plugins]

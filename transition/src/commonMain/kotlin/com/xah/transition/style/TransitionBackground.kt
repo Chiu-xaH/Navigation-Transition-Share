@@ -25,6 +25,10 @@ fun Modifier.transitionBackground(
     navHostController: NavHostController,
     route : String,
 ) : Modifier = with(TransitionState.transitionBackgroundStyle) {
+    if(TransitionState.firstStartRoute == route && !TransitionState.started) {
+        TransitionState.started = true
+        return Modifier
+    }
     val transplantBackground = TransitionState.transplantBackground
     val isExpanded = navHostController.currentRoute() != route
     val speed = TransitionState.curveStyle.speedMs + TransitionState.curveStyle.speedMs/2

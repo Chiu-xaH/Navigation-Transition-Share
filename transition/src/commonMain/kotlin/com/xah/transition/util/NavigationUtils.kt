@@ -12,7 +12,7 @@ fun NavController.navigateAndClear(route: String) {
     }
 }
 
-fun NavController.navigateAndSave(route: String) {
+fun NavController.navigateWithSave(route: String) {
     navigate(route) {
         launchSingleTop = true
         restoreState = true
@@ -23,14 +23,14 @@ fun NavController.navigateAndSaveForTransition(route: String, transplantBackgrou
     // 禁用背景透明
     TransitionState.transplantBackground = transplantBackground
 //    println("READY GO $route | CURRENT" + this.allRouteStack())
-    navigateAndSave(route)
+    navigateWithSave(route)
 //    println("GONE" + this.allRouteStack())
 }
 
 @Composable
 fun NavController.currentRoute() : String? = this.currentBackStackEntryAsState().value?.destination?.route
 @Composable
-fun NavController.isCurrentRoute(route: String) : Boolean = currentRoute() == route
+fun NavController.isCurrentRoute(route: String) : Boolean = currentRoute()?.substringBefore("?") == route.substringBefore("?")
 
 // 得到上一级
 fun NavController.previousRoute(): String? = this.previousBackStackEntry?.destination?.route
