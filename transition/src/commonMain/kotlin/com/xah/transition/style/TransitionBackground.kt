@@ -25,10 +25,16 @@ fun Modifier.transitionBackground(
     navHostController: NavHostController,
     route : String,
 ) : Modifier = with(TransitionState.transitionBackgroundStyle) {
-    if(TransitionState.firstStartRoute == route && !TransitionState.started) {
-        TransitionState.started = true
+    // 禁用刚冷启动第一个界面模糊缩放
+    if(TransitionState.firstUse && TransitionState.firstTransition) {
+        TransitionState.firstUse = false
+        return Modifier
+    } else if(TransitionState.firstTransition) {
+        // 禁用刚冷启动第一次转场动画的增强效果
+        TransitionState.firstTransition = false
         return Modifier
     }
+
     val transplantBackground = TransitionState.transplantBackground
     val isExpanded = navHostController.currentRoute() != route
     val speed = TransitionState.curveStyle.speedMs + TransitionState.curveStyle.speedMs/2

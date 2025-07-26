@@ -25,9 +25,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-    LaunchedEffect(Unit) {
-        TransitionState.firstStartRoute = ScreenRoute.HomeScreen.route
-    }
+
 //    val vm = remember { UIViewModel() }
     MaterialTheme {
         AppNavHost()
