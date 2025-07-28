@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -60,10 +61,8 @@ fun SharedTransitionScope.TransitionScaffold(
     // 当回退时，即从CustomScaffold2回CustomScaffold1时，CustomScaffold2立刻showSurface=false，而CustomScaffold1一直为true
     var show by rememberSaveable(route) { mutableStateOf(false) }
 
-    var scale by remember { mutableFloatStateOf(1f) }
-    TransitionPredictiveBackHandler(navHostController) {
-        scale = it
-    }
+    var scale by remember { mutableStateOf(1f) }
+
     LaunchedEffect(isCurrentEntry) {
         // 当前页面首次进入时播放动画
         if (isCurrentEntry && !show) {
@@ -78,6 +77,18 @@ fun SharedTransitionScope.TransitionScaffold(
         }
     }
 
+    var useBackHandler by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if(useBackHandler == false) {
+            delay(speed*1L)
+            useBackHandler = true
+        }
+    }
+    if(useBackHandler) {
+        TransitionPredictiveBackHandler(navHostController) {
+            scale = it
+        }
+    }
 
 
     // 回退后恢复上一个页面的显示状态

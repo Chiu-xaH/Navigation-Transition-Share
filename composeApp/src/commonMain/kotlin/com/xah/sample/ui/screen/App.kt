@@ -22,7 +22,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-
 //    val vm = remember { UIViewModel() }
     MaterialTheme {
         AppNavHost()

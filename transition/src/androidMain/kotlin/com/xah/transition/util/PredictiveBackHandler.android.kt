@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.cancellation.CancellationException
 
+private const val targetScale = 0.075f
+
 @Composable
 actual fun TransitionPredictiveBackHandler(
     navController : NavHostController,
@@ -17,9 +19,10 @@ actual fun TransitionPredictiveBackHandler(
         try {
             progress.collect { backEvent ->
                 // code for progress
-                onScale(1f - (0.1f * backEvent.progress))
+                onScale(1f - (targetScale * backEvent.progress))
             }
             // code for completion
+            onScale(0f)
             navController.popBackStack()
         } catch (e: CancellationException) {
             // code for cancellation

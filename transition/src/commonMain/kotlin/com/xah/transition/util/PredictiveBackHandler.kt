@@ -1,5 +1,7 @@
 package com.xah.transition.util
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
