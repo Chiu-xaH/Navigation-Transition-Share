@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/composeApp/AnimationSample.composeApp.nativeMain.iml" filepath="$PROJECT_DIR$/.idea/modules/composeApp/AnimationSample.composeApp.nativeMain.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/transition/AnimationSample.transition.jvmMain.iml" filepath="$PROJECT_DIR$/.idea/modules/transition/AnimationSample.transition.jvmMain.iml" />
     </modules>
   </component>
 </project>

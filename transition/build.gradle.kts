@@ -1,16 +1,44 @@
+@file:OptIn(ExperimentalWasmDsl::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-
 }
 
 kotlin {
     jvm()
-// Target declarations - add or remove as needed below. These define
-// which platforms this KMP module supports.
-// See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+    }
+
+//    jvm("desktop")
+//
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs {
+//        moduleName = "transition"
+//        browser {
+//            val rootDirPath = project.rootDir.path
+//            val projectDirPath = project.projectDir.path
+//            commonWebpackConfig {
+//                outputFileName = "transition.js"
+//                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+//                    static = (static ?: mutableListOf()).apply {
+//                        // Serve sources to debug inside browser
+//                        add(rootDirPath)
+//                        add(projectDirPath)
+//                    }
+//                }
+//            }
+//        }
+//        binaries.executable()
+//    }
+
     androidLibrary {
         namespace = "com.xah.transition"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -26,13 +54,7 @@ kotlin {
         }
     }
 
-// For iOS targets, this is also where you should
-// configure native binary output. For more information, see:
-// https://kotlinlang.org/docs/multiplatform-build-native-binaries.html#build-xcframeworks
 
-// A step-by-step guide on how to include this library in an XCode
-// project can be found here:
-// https://developer.android.com/kotlin/multiplatform/migrate
     val xcfName = "transitionKit"
 
     iosX64 {
@@ -53,21 +75,11 @@ kotlin {
         }
     }
 
-// Source set declarations.
-// Declaring a target automatically creates a source set with the same name. By default, the
-// Kotlin Gradle Plugin creates additional source sets that depend on each other, since it is
-// common to share sources between related targets.
-// See: https://kotlinlang.org/docs/multiplatform-hierarchy.html
     sourceSets {
         commonMain {
             dependencies {
                 implementation(libs.navigation.compose)
                 implementation(compose.material3)
-//                implementation(libs.kotlin.stdlib)
-//                implementation(compose.runtime)
-//                implementation(compose.foundation)
-//                implementation(compose.ui)
-                // Add KMP dependencies here
             }
         }
 
@@ -80,9 +92,11 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(libs.androidx.activity.compose)
-                // Add Android-specific dependencies here. Note that this source set depends on
-                // commonMain by default and will correctly pull the Android artifacts of any KMP
-                // dependencies declared in commonMain.
+            }
+        }
+
+        wasmJsMain {
+            dependencies {
             }
         }
 
@@ -96,11 +110,7 @@ kotlin {
 
         iosMain {
             dependencies {
-                // Add iOS-specific dependencies here. This a source set created by Kotlin Gradle
-                // Plugin (KGP) that each specific iOS target (e.g., iosX64) depends on as
-                // part of KMP’s default source set hierarchy. Note that this source set depends
-                // on common by default and will correctly pull the iOS artifacts of any
-                // KMP dependencies declared in commonMain.
+
             }
         }
     }

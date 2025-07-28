@@ -5,12 +5,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.xah.transition.state.TransitionState
 
-fun NavController.navigateAndClear(route: String) {
-    navigate(route) {
-        popUpTo(graph.startDestinationId) { inclusive = true } // 清除所有历史记录
-        launchSingleTop = true // 避免多次实例化相同的目的地
-    }
-}
+
+//fun NavController.navigateAndClear(route: String) {
+//    navigate(route) {
+//        popUpTo(graph.startDestinationId) { inclusive = true } // 清除所有历史记录
+//        launchSingleTop = true // 避免多次实例化相同的目的地
+//    }
+//}
 
 fun NavController.navigateWithSave(route: String) {
     navigate(route) {

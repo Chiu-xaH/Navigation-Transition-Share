@@ -48,6 +48,7 @@ kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", versio
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+navigation-compose-wasm-js = { module = "org.jetbrains.androidx.navigation:navigation-compose-wasm-js", version.ref = "navigationComposeVersion" }
 
 
 

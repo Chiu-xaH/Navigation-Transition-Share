@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="AnimationSample.transition.desktopMain" target="17" />
+      <module name="AnimationSample.transition.desktopTest" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

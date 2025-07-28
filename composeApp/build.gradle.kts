@@ -88,12 +88,15 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+        wasmJsMain.dependencies {
+        }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
         }
     }
 }
+
 
 android {
     namespace = "com.xah.sample"
@@ -137,7 +140,7 @@ compose.desktop {
         }
     }
 }
-// 热重载UI
+// 热重载UI 不管用啊
 composeCompiler {
     featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
 }

@@ -7,10 +7,10 @@ Wasm(JS)、Desktop(JVM)、iOS、Android
 
 ## 命令
 ```bash
-./gradlew wasmJsBrowserDevelopmentRun -t # Wasm Run In Development
-./gradlew wasmJsBrowserProductRun -t # Wasm Run In Product
-./gradlew packageDistributionForCurrentOS # 打包
-./gradlew run # Desktop Run
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun  # Wasm Run In Development
+./gradlew :composeApp:wasmJsBrowserProductRun  # Wasm Run In Product
+./gradlew :composeApp:packageDistributionForCurrentOS # 打包
+./gradlew :composeApp:run --no-configuration-cache # Jvm/Desktop Run
 ```
 
 ## 计划
