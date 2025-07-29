@@ -10,6 +10,7 @@ Wasm(JS)、Desktop(JVM)、iOS、Android
 ./gradlew :composeApp:wasmJsBrowserDevelopmentRun  # Wasm Run In Development
 ./gradlew :composeApp:wasmJsBrowserProductRun  # Wasm Run In Product
 ./gradlew :composeApp:packageDistributionForCurrentOS # 打包
+./gradlew :composeApp:wasmJsBrowserDistribution # 以Web打包
 ./gradlew :composeApp:run --no-configuration-cache # Jvm/Desktop Run
 ```
 

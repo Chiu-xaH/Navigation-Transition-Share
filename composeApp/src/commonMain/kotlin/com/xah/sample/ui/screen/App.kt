@@ -35,8 +35,6 @@ fun AppNavHost() {
     val navController = rememberNavController()
     val firstRoute = remember { ScreenRoute.HomeScreen.route }
 
-
-
     SharedTransitionLayout(
         modifier = Modifier.background(MaterialTheme.colorScheme.surface)
     ) {

@@ -17,28 +17,6 @@ kotlin {
         browser()
     }
 
-//    jvm("desktop")
-//
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        moduleName = "transition"
-//        browser {
-//            val rootDirPath = project.rootDir.path
-//            val projectDirPath = project.projectDir.path
-//            commonWebpackConfig {
-//                outputFileName = "transition.js"
-//                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-//                    static = (static ?: mutableListOf()).apply {
-//                        // Serve sources to debug inside browser
-//                        add(rootDirPath)
-//                        add(projectDirPath)
-//                    }
-//                }
-//            }
-//        }
-//        binaries.executable()
-//    }
-
     androidLibrary {
         namespace = "com.xah.transition"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -78,7 +56,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.navigation.compose)
+//                implementation(libs.navigation.compose)
                 implementation(compose.material3)
             }
         }
@@ -91,12 +69,14 @@ kotlin {
 
         androidMain {
             dependencies {
+                implementation(libs.navigation.compose)
                 implementation(libs.androidx.activity.compose)
             }
         }
 
         wasmJsMain {
             dependencies {
+                implementation(libs.navigation.compose.new)
             }
         }
 
@@ -110,7 +90,12 @@ kotlin {
 
         iosMain {
             dependencies {
-
+                implementation(libs.navigation.compose.new)
+            }
+        }
+        jvmMain {
+            dependencies {
+                implementation(libs.navigation.compose.new)
             }
         }
     }

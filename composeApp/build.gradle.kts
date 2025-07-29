@@ -13,6 +13,8 @@ plugins {
     alias(libs.plugins.composeHotReload)
 }
 
+
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -62,8 +64,11 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             // 透明状态栏
             implementation(libs.accompanist.systemuicontroller)
+            implementation(libs.navigation.compose)
         }
         commonMain.dependencies {
+            implementation(project(":transition"))
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -75,24 +80,20 @@ kotlin {
             // 协程
             implementation(libs.kotlinx.coroutines.core)
             // 导航
-            implementation(libs.navigation.compose)
+//            implementation(libs.navigation.compose)
             // 自适应横竖屏布局
             implementation(libs.material3.adaptive.navigation.suite)
-            // DataStore
-//            implementation(libs.androidx.datastore.preferences)
-//            implementation(libs.androidx.datastore)
-            // HAZE模糊
-//            implementation(libs.haze)
-            implementation(project(":transition"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
         wasmJsMain.dependencies {
+            implementation(libs.navigation.compose.new)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.navigation.compose.new)
         }
     }
 }
@@ -144,3 +145,4 @@ compose.desktop {
 composeCompiler {
     featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
 }
+
