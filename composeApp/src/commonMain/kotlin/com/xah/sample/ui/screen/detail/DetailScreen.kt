@@ -23,6 +23,7 @@ import animationsample.composeapp.generated.resources.deployed_code
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.component.StyleCardListItem
 import com.xah.sample.ui.style.topBarTransplantColor
+import com.xah.transition.component.TopBarNavigateIcon
 import com.xah.transition.component.TransitionScaffold
 import com.xah.transition.component.containerShare
 import com.xah.transition.component.iconElementShare
@@ -36,7 +37,6 @@ fun DetailScreen(
     route : String,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    onBackPressed: () -> Unit
 ) {
     with(sharedTransitionScope) {
         TransitionScaffold (
@@ -46,14 +46,7 @@ fun DetailScreen(
             topBar = {
                 TopAppBar(
                     navigationIcon = {
-                        IconButton(onClick = onBackPressed) {
-                            Icon(
-                                painterResource(Res.drawable.deployed_code),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, route = route)
-                            )
-                        }
+                        TopBarNavigateIcon(navHostController,animatedContentScope,route, Res.drawable.deployed_code)
                     },
                     title = { Text(
                         route,
@@ -64,7 +57,7 @@ fun DetailScreen(
             }
         ) { innerPadding ->
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-                Button (onClick = onBackPressed, modifier = Modifier.align(Alignment.Center)) {
+                Button (onClick = { navHostController.popBackStack() }, modifier = Modifier.align(Alignment.Center)) {
                     Text("界面 $route")
                 }
             }
@@ -81,9 +74,6 @@ fun DetailScreenR(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
 ) {
-    val onBackPressed = {
-        navHostController.popBackStack()
-    }
     val route = ScreenRoute.ModuleScreen.route + "R"+ routeI
     with(sharedTransitionScope) {
         TransitionScaffold (
@@ -93,14 +83,7 @@ fun DetailScreenR(
             topBar = {
                 TopAppBar(
                     navigationIcon = {
-                        IconButton(onClick = {onBackPressed()}) {
-                            Icon(
-                                painterResource(Res.drawable.deployed_code),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier =iconElementShare(animatedContentScope=animatedContentScope,route = route)
-                            )
-                        }
+                        TopBarNavigateIcon(navHostController,animatedContentScope,route, Res.drawable.deployed_code)
                     },
                     title = { Text(route) },
                     colors = topBarTransplantColor(),
@@ -127,7 +110,7 @@ fun DetailScreenR(
                         }
                     )
                 } else {
-                    Button(onClick = { onBackPressed()}, modifier = Modifier.align(Alignment.Center)) {
+                    Button(onClick = { navHostController.popBackStack() }, modifier = Modifier.align(Alignment.Center)) {
                         Text("返回")
                     }
                 }

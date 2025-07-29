@@ -44,6 +44,7 @@ import com.xah.sample.ui.component.DividerTextExpandedWith
 import com.xah.sample.ui.component.TransplantListItem
 import com.xah.sample.ui.style.topBarTransplantColor
 import com.xah.sample.ui.util.MyAnimationManager
+import com.xah.transition.component.TopBarNavigateIcon
 import com.xah.transition.component.TransitionScaffold
 import com.xah.transition.component.containerShare
 import com.xah.transition.component.iconElementShare
@@ -58,7 +59,6 @@ fun SettingsScreen(
     navController : NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    onBackPressed: () -> Unit
 ) {
     val route = remember { ScreenRoute.SettingsScreen.route }
     var motionBlur by remember { mutableStateOf(TransitionState.transitionBackgroundStyle.motionBlur) }
@@ -94,14 +94,7 @@ fun SettingsScreen(
                 TopAppBar(
                     title = { Text("设置") },
                     navigationIcon = {
-                        IconButton(onClick = onBackPressed) {
-                            Icon(
-                                painterResource(Res.drawable.settings),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, route = route)
-                            )
-                        }
+                        TopBarNavigateIcon(navController,animatedContentScope,route, Res.drawable.settings)
                     },
                     colors = topBarTransplantColor(),
                 )

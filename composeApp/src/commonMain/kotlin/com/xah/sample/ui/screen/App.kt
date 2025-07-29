@@ -62,9 +62,7 @@ fun AppNavHost() {
                     navController,
                     this@SharedTransitionLayout,
                     this@composable,
-                ) {
-                    navController.popBackStack()
-                }
+                )
             }
             for(i in 1..31) {
                 composable((ScreenRoute.ModuleScreen.route + "R" + i)) {
@@ -84,9 +82,7 @@ fun AppNavHost() {
                             route,
                             this@SharedTransitionLayout,
                             this@composable,
-                        ) {
-                            navController.popBackStack()
-                        }
+                        )
                     }
                 }
             }
