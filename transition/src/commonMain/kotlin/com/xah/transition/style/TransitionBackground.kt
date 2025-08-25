@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
-import com.xah.transition.util.currentRoute
+import com.xah.transition.util.isCurrentRouteWithoutArgs
 import com.xah.transition.state.TransitionState
 
 @Composable
@@ -28,38 +28,60 @@ fun Modifier.transitionBackground(
     navHostController: NavHostController,
     route : String,
 ) : Modifier = with(TransitionState.transitionBackgroundStyle) {
+    //👍 NONE
+    if(level == TransitionLevel.NONE) {
+        return this@transitionBackground
+    }
+    if(route == TransitionState.firstStartRoute && TransitionState.firstUse) {
+        return this@transitionBackground
+    }
     // 禁用刚冷启动第一个界面模糊缩放
     if(TransitionState.firstUse && TransitionState.firstTransition) {
         TransitionState.firstUse = false
-        return Modifier
+        return this@transitionBackground
     } else if(TransitionState.firstTransition) {
         // 禁用刚冷启动第一次转场动画的增强效果
         TransitionState.firstTransition = false
-        return Modifier
+        return this@transitionBackground
     }
-
     val transplantBackground = TransitionState.transplantBackground
-    val isExpanded = navHostController.currentRoute() != route
-    val speed = TransitionState.curveStyle.speedMs + TransitionState.curveStyle.speedMs/2
-    // 稍微晚于运动结束
-    val blurSize by animateDpAsState(
-        targetValue = if (isExpanded && motionBlur) blurRadius else 0.dp, label = ""
-        ,animationSpec = tween(speed, easing = FastOutSlowInEasing),
-    )
+    val isExpanded = !navHostController.isCurrentRouteWithoutArgs(route)
+    val speed = TransitionState.curveStyle.speedMs
 
-    val scale = animateFloatAsState( //.875f
-        targetValue = if (isExpanded) scaleValue else 1f,
-        animationSpec = tween(speed , easing = FastOutSlowInEasing)
-    )
-    val backgroundColor by animateColorAsState(
-        targetValue = if(isExpanded) backgroundColor else Color.Transparent,
-        animationSpec = tween(TransitionState.curveStyle.speedMs, easing = FastOutSlowInEasing)
+    val backgroundColor by animateFloatAsState(
+        targetValue = if(isExpanded) backgroundDark else 0f,
+        animationSpec = tween(speed, easing = FastOutSlowInEasing),
     )
     // 蒙版 遮罩
-    if(!transplantBackground)
-        Box(modifier = Modifier.fillMaxSize().background(backgroundColor).zIndex(2f))
+    if(!transplantBackground && level.code >= TransitionLevel.LOW.code)
+        Box(modifier = Modifier.fillMaxSize().background(
+            Color.Black.copy( if(level.code >= TransitionLevel.MEDIUM.code) backgroundColor else backgroundColor*0.75f)
+        ).zIndex(1f))
 
-    val transitionModifier = if(forceTransition) this@transitionBackground.scale(scale.value).blur(blurSize) else this@transitionBackground
+    //👍 LOW
+    if(level == TransitionLevel.LOW) {
+        return this@transitionBackground
+    }
 
-    transitionModifier
+    val scale = animateFloatAsState( //.875f
+        targetValue = if (isExpanded) {
+            if(motionBlur) scaleValue-scaleDiffer
+            else scaleValue
+        } else 1f,
+        animationSpec = tween(speed*4/3, easing = FastOutSlowInEasing)
+    )
+    //👍 MEDIUM
+    if(level == TransitionLevel.MEDIUM) {
+        return this@transitionBackground.scale(scale.value)
+    }
+
+    // 稍微晚于运动结束
+    val blurSize by animateDpAsState(
+        targetValue = if (isExpanded && motionBlur) blurRadius else 0.dp,
+        label = "",
+        animationSpec = tween(speed*7/5, easing = FastOutSlowInEasing)
+    )
+
+    //👍 HIGH
+    return this@transitionBackground.blur(blurSize).scale(scale.value)
 }

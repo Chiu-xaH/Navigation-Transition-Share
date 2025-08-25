@@ -40,11 +40,13 @@ fun MyCustomCard(
     containerColor : Color? = null,
     hasElevation : Boolean = false,
     content: @Composable () -> Unit) {
+    val baseModifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = APP_HORIZONTAL_DP, vertical = CARD_NORMAL_DP)
+
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = if(hasElevation) 1.75.dp else 0.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = APP_HORIZONTAL_DP, vertical = CARD_NORMAL_DP),
+        modifier = baseModifier.then(modifier),
         shape = MaterialTheme.shapes.medium,
         colors = if(containerColor == null) CardDefaults.cardColors() else CardDefaults.cardColors(containerColor = containerColor)
     ) {
@@ -230,7 +232,7 @@ fun largeCardColor() : Color = MaterialTheme.colorScheme.surfaceVariant
 
 val CARD_NORMAL_DP : Dp = 2.5.dp
 
-val APP_HORIZONTAL_DP : Dp = 15.dp
+val APP_HORIZONTAL_DP : Dp = 16.25.dp
 
 @Composable
 fun LargeCard(

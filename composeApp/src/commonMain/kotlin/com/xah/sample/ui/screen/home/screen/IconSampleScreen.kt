@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -71,21 +73,19 @@ fun IconSampleScreen(
             Spacer(Modifier.height(innerPadding.calculateTopPadding()).statusBarsPadding())
             DividerTextExpandedWith("无边框按钮") {
                 RowHorizontal(modifier = Modifier.fillMaxWidth()) {
-                    with(sharedTransitionScope) {
-                        val route = func2[0]
-                        IconButton(
-                            onClick = {
-                                navController.navigateAndSaveForTransition(route,true)
-                            },
-                            modifier = containerShare(animatedContentScope = animatedContentScope, route = route, resize = true)
-                        ) {
-                            Icon(
-                                painterResource(Res.drawable.deployed_code),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier =iconElementShare(animatedContentScope=animatedContentScope, route = route)
-                            )
-                        }
+                    val route = func2[0]
+                    IconButton(
+                        onClick = {
+                            navController.navigateAndSaveForTransition(route,true)
+                        },
+                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope = animatedContentScope, route = route, resize = true)
+                    ) {
+                        Icon(
+                            painterResource(Res.drawable.deployed_code),
+                            null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
+                        )
                     }
                     Spacer(Modifier.width(APP_HORIZONTAL_DP))
                     with(sharedTransitionScope) {
@@ -94,7 +94,7 @@ fun IconSampleScreen(
                             onClick = {
                                 navController.navigateAndSaveForTransition(route,true)
                             },
-                            modifier = containerShare(animatedContentScope=animatedContentScope, route = route)
+                            modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
                         ) {
                             Text("按钮")
                         }
@@ -103,21 +103,46 @@ fun IconSampleScreen(
             }
             DividerTextExpandedWith("有边框按钮") {
                 RowHorizontal(modifier = Modifier.fillMaxWidth())  {
-                    with(sharedTransitionScope) {
-                        val route = func2[5]
-                        FloatingActionButton (
-                            elevation =  FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
-                            onClick = {
-                                navController.navigateAndSaveForTransition(route)
-                            },
-                            modifier = containerShare(animatedContentScope=animatedContentScope,route=route)
-                        ) {
-                            Icon(
-                                painterResource(Res.drawable.deployed_code),
-                                null,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope,  route = route)
-                            )
-                        }
+                    val route = func2[5]
+                    FloatingActionButton (
+                        elevation =  FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
+                        onClick = {
+                            navController.navigateAndSaveForTransition(route)
+                        },
+                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route)
+                    ) {
+                        Icon(
+                            painterResource(Res.drawable.deployed_code),
+                            null,
+                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route)
+                        )
+                    }
+                    Spacer(Modifier.width(APP_HORIZONTAL_DP))
+                    val route2 = func2[6]
+                    FilledTonalIconButton (
+                        onClick = {
+                            navController.navigateAndSaveForTransition(route2)
+                        },
+                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route2, roundShape = CircleShape)
+                    ) {
+                        Icon(
+                            painterResource(Res.drawable.deployed_code),
+                            null,
+                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route2)
+                        )
+                    }
+                    Spacer(Modifier.width(APP_HORIZONTAL_DP))
+                    val route3 = func2[1]
+                    FilledTonalIconButton (
+                        onClick = {
+                            navController.navigateAndSaveForTransition(route3,true)
+                        },
+                    ) {
+                        Icon(
+                            painterResource(Res.drawable.deployed_code),
+                            null,
+                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route3,)
+                        )
                     }
                 }
             }

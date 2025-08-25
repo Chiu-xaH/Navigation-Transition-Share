@@ -98,28 +98,26 @@ fun TwoColumnSampleScreen(
             }
             items(func.size, key = { func[it] }) { index ->
                 val route = func[index]
-                with(sharedTransitionScope) {
-                    SmallCard(
-                        modifier = containerShare(Modifier.padding(horizontal = 3.dp, vertical = 3.dp),animatedContentScope,route)
-                        ,
-                        color = MaterialTheme.colorScheme.primaryContainer
-                    ) {
-                        TransplantListItem(
-                            headlineContent = { Text(
-                                route,
-                                ) },
-                            leadingContent = {
-                                Icon(
-                                    painterResource(Res.drawable.deployed_code),
-                                    null,
-                                    modifier = iconElementShare(animatedContentScope=animatedContentScope, route = route)
-                                )
-                            },
-                            modifier = Modifier.clickable {
-                                onItemClick(route)
-                            }
-                        )
-                    }
+                SmallCard(
+                    modifier = Modifier.padding( 3.dp).containerShare(sharedTransitionScope,animatedContentScope,route)
+                    ,
+                    color = MaterialTheme.colorScheme.primaryContainer
+                ) {
+                    TransplantListItem(
+                        headlineContent = { Text(
+                            route,
+                        ) },
+                        leadingContent = {
+                            Icon(
+                                painterResource(Res.drawable.deployed_code),
+                                null,
+                                modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            onItemClick(route)
+                        }
+                    )
                 }
             }
             // 有一些轻量级功能，只需要使用BottomSheet即可，无需打开新的页面
@@ -154,25 +152,23 @@ fun RSampleScreen(
         animatedContentScope = animatedContentScope,
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-            with(sharedTransitionScope) {
-                StyleCardListItem(
-                    headlineContent = { Text("进入递归") },
-                    leadingContent = {
-                        Icon(
-                            painterResource(Res.drawable.deployed_code),
-                            null,
-                            modifier =iconElementShare(animatedContentScope=animatedContentScope, route = route)
-                        )
-                    },
-                    cardModifier = containerShare(Modifier.align(Alignment.Center),animatedContentScope,route, resize = true)
-                    ,
-                    modifier = Modifier.clickable {
-                        onItemClick(route)
-                    },
-                    color = MaterialTheme.colorScheme.primaryContainer
+            StyleCardListItem(
+                headlineContent = { Text("进入递归") },
+                leadingContent = {
+                    Icon(
+                        painterResource(Res.drawable.deployed_code),
+                        null,
+                        modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
+                    )
+                },
+                cardModifier = Modifier.align(Alignment.Center).containerShare(sharedTransitionScope,animatedContentScope,route, resize = true)
+                ,
+                modifier = Modifier.clickable {
+                    onItemClick(route)
+                },
+                color = MaterialTheme.colorScheme.primaryContainer
 
-                )
-            }
+            )
         }
     }
 }

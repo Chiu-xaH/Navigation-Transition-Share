@@ -5,6 +5,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import animationsample.transition.generated.resources.Res
@@ -23,6 +27,7 @@ import com.xah.transition.style.DefaultTransitionStyle
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import com.xah.transition.util.canPopBack
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -30,36 +35,41 @@ fun SharedTransitionScope.TopBarNavigateIcon(
     navController : NavHostController,
     animatedContentScope: AnimatedContentScope,
     route : String,
-    icon :  DrawableResource
+    icon :  DrawableResource,
+    restoreIcon : Boolean = true
 ) {
-    val speed = TransitionState.curveStyle.speedMs + TransitionState.curveStyle.speedMs/2
+    val speed = TransitionState.curveStyle.speedMs
     var show by remember { mutableStateOf(true) }
     LaunchedEffect(Unit) {
         show = true
         delay(speed*1L)
-        delay(1000L)
+        delay(1500L)
         show = false
-        if(TransitionState.transplantBackground) {
+        if(restoreIcon || TransitionState.transplantBackground) {
             delay(3000L)
             show = true
         }
     }
 
-    IconButton(onClick = { navController.popBackStack() }) {
+    IconButton(onClick = {
+        if(navController.canPopBack()) {
+            navController.popBackStack()
+        }
+    }) {
         Box() {
             AnimatedVisibility(
                 visible = show,
                 enter = DefaultTransitionStyle.centerAllAnimation.enter,
                 exit = DefaultTransitionStyle.centerAllAnimation.exit
             ) {
-                Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.primary,modifier = iconElementShare(animatedContentScope = animatedContentScope, route = route))
+                Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.primary,modifier = Modifier.iconElementShare(this@TopBarNavigateIcon,animatedContentScope = animatedContentScope, route = route))
             }
             AnimatedVisibility(
                 visible = !show,
                 enter = DefaultTransitionStyle.centerAllAnimation.enter,
                 exit = DefaultTransitionStyle.centerAllAnimation.exit
             ) {
-                Icon(painterResource(Res.drawable.arrow_back), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             }
         }
     }
@@ -68,7 +78,11 @@ fun SharedTransitionScope.TopBarNavigateIcon(
 
 @Composable
 fun TopBarNavigateIcon(navController : NavController) {
-    IconButton(onClick = { navController.popBackStack() }) {
+    IconButton(onClick = {
+        if(navController.canPopBack()) {
+            navController.popBackStack()
+        }
+    }) {
         Icon(painterResource(Res.drawable.arrow_back), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
     }
 }

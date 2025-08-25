@@ -45,21 +45,19 @@ fun SharedTopBar(
                 scrollBehavior = scrollBehavior,
                 title = { Text(title) },
                 actions = {
-                    with(sharedTransitionScope) {
-                        val route = remember { ScreenRoute.SettingsScreen.route }
-                        IconButton(
-                            onClick = {
-                                navController.navigateAndSaveForTransition(route,true)
-                            },
-                            modifier = containerShare(animatedContentScope=animatedContentScope,route=route)
-                        ) {
-                            Icon(
-                                painterResource(Res.drawable.settings),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, route = route)
-                            )
-                        }
+                    val route = remember { ScreenRoute.SettingsScreen.route }
+                    IconButton(
+                        onClick = {
+                            navController.navigateAndSaveForTransition(route,true)
+                        },
+                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route)
+                    ) {
+                        Icon(
+                            painterResource(Res.drawable.settings),
+                            null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
+                        )
                     }
                 },
                 colors = topBarTransplantColor(),

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,46 +23,51 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.navigation.NavHostController
 import com.xah.transition.state.TransitionState
 import com.xah.transition.style.transitionBackground
 import com.xah.transition.util.TransitionPredictiveBackHandler
-import com.xah.transition.util.isCurrentRoute
+import com.xah.transition.util.isCurrentRouteWithoutArgs
 import com.xah.transition.util.isInBottom
-import com.xah.transition.util.previousRoute
+import com.xah.transition.util.previousRouteWithArgWithoutValues
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.TransitionScaffold(
     animatedContentScope: AnimatedContentScope,
+    roundShape : Shape = MaterialTheme.shapes.medium,
     route: String,
     navHostController : NavHostController,
-    modifier: Modifier = containerShare(
-        Modifier.fillMaxSize()
-            .transitionBackground(navHostController, route)
-            ,
+    modifier: Modifier = Modifier.clip(roundShape)
+        .transitionBackground(navHostController, route).containerShare(
+            this,
         animatedContentScope,
         route,
-        resize = false
+        resize = true,
+        roundShape,
     ),
     topBar: @Composable (() -> Unit) = {},
     bottomBar: @Composable (() -> Unit) = {},
     floatingActionButton: @Composable (() -> Unit) = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     containerColor : Color? = null,
+    enablePredictive : Boolean = true,
     content: @Composable ((PaddingValues) -> Unit)
 ) {
+    var scale by remember { mutableStateOf(1f) }
+
+
     val speed = TransitionState.curveStyle.speedMs
     // 当从CustomScaffold1向CustomScaffold2时，CustomScaffold2先showSurface=false再true，而CustomScaffold1一直为true
-    val isCurrentEntry = navHostController.isCurrentRoute(route)
-    val isPreviousEntry = navHostController.previousRoute() == route
+    val isCurrentEntry = navHostController.isCurrentRouteWithoutArgs(route)
+    val isPreviousEntry = navHostController.previousRouteWithArgWithoutValues() == route
     // 当回退时，即从CustomScaffold2回CustomScaffold1时，CustomScaffold2立刻showSurface=false，而CustomScaffold1一直为true
     var show by rememberSaveable(route) { mutableStateOf(false) }
-
-    var scale by remember { mutableStateOf(1f) }
 
     LaunchedEffect(isCurrentEntry) {
         // 当前页面首次进入时播放动画
@@ -84,7 +90,8 @@ fun SharedTransitionScope.TransitionScaffold(
             useBackHandler = true
         }
     }
-    if(useBackHandler) {
+
+    if(useBackHandler && enablePredictive) {
         TransitionPredictiveBackHandler(navHostController) {
             scale = it
         }
@@ -99,7 +106,7 @@ fun SharedTransitionScope.TransitionScaffold(
     }
 
     Scaffold(
-        containerColor = containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface,
+        containerColor =  containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface,
         modifier = modifier.scale(scale),
         topBar = topBar,
         bottomBar = {

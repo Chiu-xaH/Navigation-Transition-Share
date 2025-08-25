@@ -34,6 +34,7 @@ import com.xah.sample.ui.util.MyAnimationManager
 import com.xah.sample.viewmodel.UIViewModel
 import com.xah.transition.state.TransitionState
 
+val DIVIDER_TEXT_VERTICAL_PADDING = 9.dp
 // 小标题
 @Composable
 fun DividerText(text: String, onClick: (() -> Unit?)? = null) {
@@ -52,7 +53,7 @@ fun DividerText(text: String, onClick: (() -> Unit?)? = null) {
         text = text,
         color = color,
         modifier = Modifier
-            .padding(horizontal = APP_HORIZONTAL_DP + CARD_NORMAL_DP, vertical = 10.dp)
+            .padding(horizontal = APP_HORIZONTAL_DP , vertical = DIVIDER_TEXT_VERTICAL_PADDING)
             .clickable { onClick?.invoke() }
             .pointerInput(Unit) {
                 detectTapGestures(

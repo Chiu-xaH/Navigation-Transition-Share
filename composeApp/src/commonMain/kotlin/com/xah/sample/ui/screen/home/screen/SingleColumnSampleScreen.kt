@@ -5,26 +5,34 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.deployed_code
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.CARD_NORMAL_DP
+import com.xah.sample.ui.component.MyCustomCard
 import com.xah.sample.ui.component.StyleCardListItem
+import com.xah.sample.ui.component.TransplantListItem
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
 import com.xah.transition.component.containerShare
 import com.xah.transition.component.iconElementShare
@@ -79,48 +87,43 @@ fun SingleColumnSampleScreen(
             item { Spacer(Modifier.height(innerPadding.calculateTopPadding()).statusBarsPadding()) }
             items(func.size, key = { func[it] }) { index ->
                 val route = func[index]
-                with(sharedTransitionScope) {
-                    StyleCardListItem(
-                        cardModifier = containerShare(animatedContentScope=animatedContentScope,route=route)
-                        ,
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        headlineContent = { Text(route) },
-                        supportingContent = { Text("内容$index")},
-                        leadingContent = {
-                            Icon(
-                                painterResource(Res.drawable.deployed_code),
-                                null,
-                                modifier =iconElementShare(animatedContentScope=animatedContentScope,  route = route)
-                            )
-                        },
-                        modifier = Modifier.clickable {
-                            onItemClick(route)
-                        }
-                    )
-                }
+                StyleCardListItem(
+                    cardModifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route) ,
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    headlineContent = { Text(route) },
+                    supportingContent = { Text("内容$index")},
+                    leadingContent = {
+                        Icon(
+                            painterResource(Res.drawable.deployed_code),
+                            null,
+                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route)
+                        )
+                    },
+                    modifier = Modifier.clickable {
+                        onItemClick(route)
+                    }
+                )
             }
             item { Spacer(Modifier.height(CARD_NORMAL_DP)) }
             items(func2.size, key = { func2[it] }) { index ->
                 val route = func2[index]
-                with(sharedTransitionScope) {
-                    ListItem(
-                        modifier = containerShare(animatedContentScope=animatedContentScope,route=route)
-                            .clickable {
-                                onItemClick(route)
-                            },
-                        headlineContent = { Text(route) },
-                        leadingContent = {
-                            Icon(
-                                painterResource(Res.drawable.deployed_code),
-                                null,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope,  route = route)
-                            )
+                ListItem(
+                    modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route)
+                        .clickable {
+                            onItemClick(route)
                         },
-                        supportingContent = {
-                            Text("内容${index + 1}")
-                        }
-                    )
-                }
+                    headlineContent = { Text(route) },
+                    leadingContent = {
+                        Icon(
+                            painterResource(Res.drawable.deployed_code),
+                            null,
+                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route)
+                        )
+                    },
+                    supportingContent = {
+                        Text("内容${index + 1}")
+                    }
+                )
             }
             item {
                 Spacer(

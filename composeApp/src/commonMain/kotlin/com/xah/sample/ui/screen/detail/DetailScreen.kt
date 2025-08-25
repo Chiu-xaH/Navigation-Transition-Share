@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -40,6 +41,7 @@ fun DetailScreen(
 ) {
     with(sharedTransitionScope) {
         TransitionScaffold (
+//            roundShape = if(route == ScreenRoute.Module17Screen.route) CircleShape else MaterialTheme.shapes.medium,
             route = route,
             animatedContentScope = animatedContentScope,
             navHostController = navHostController,
@@ -100,10 +102,10 @@ fun DetailScreenR(
                         },
                         leadingContent = {
                             Icon(painterResource(Res.drawable.deployed_code),null,
-                                modifier = iconElementShare(animatedContentScope=animatedContentScope, route = newRoute)
+                                modifier = Modifier.iconElementShare(this@with,animatedContentScope=animatedContentScope, route = newRoute)
                     )
                         },
-                        cardModifier =  containerShare(Modifier.align(Alignment.Center),animatedContentScope,newRoute, resize = true),
+                        cardModifier = Modifier.align(Alignment.Center).containerShare(this@with,animatedContentScope,newRoute, resize = true),
                         color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier.clickable {
                             navHostController.navigateAndSaveForTransition(newRoute)
