@@ -83,8 +83,6 @@ fun DividerTextExpandedWith(
 
     val speed = TransitionState.curveStyle.speedMs
 
-    val motionBlur = TransitionState.transitionBackgroundStyle.motionBlur
-
     var expanded by remember { mutableStateOf(defaultIsExpanded) }
     fun set() {
         expanded = !expanded
@@ -110,7 +108,7 @@ fun DividerTextExpandedWith(
                 shrinkOut(shrinkTowards = Alignment.BottomCenter,animationSpec = tween(durationMillis = speed))
         ,
         visible = expanded,
-        modifier = if(!motionBlur) Modifier else { if (openBlurAnimation) Modifier.blur(blurSize) else Modifier }
+        modifier =  if (openBlurAnimation) Modifier.blur(blurSize) else Modifier
     ) {
         Column {
             content()

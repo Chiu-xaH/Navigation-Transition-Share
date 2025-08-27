@@ -132,7 +132,7 @@ fun IconSampleScreen(
                         )
                     }
                     Spacer(Modifier.width(APP_HORIZONTAL_DP))
-                    val route3 = func2[1]
+                    val route3 = func2[4]
                     FilledTonalIconButton (
                         onClick = {
                             navController.navigateAndSaveForTransition(route3,true)

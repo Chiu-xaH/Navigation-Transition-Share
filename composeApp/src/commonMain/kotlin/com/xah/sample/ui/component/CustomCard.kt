@@ -5,10 +5,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOutQuad
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,15 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.xah.sample.ui.style.appBlur
-import com.xah.sample.viewmodel.UIViewModel
 import com.xah.transition.state.TransitionState
 
 @Composable
@@ -267,55 +261,6 @@ fun LargeCard(
     }
 }
 
-//加载大卡片
-@Composable
-fun LoadingLargeCard(
-    vm : UIViewModel,
-    title: String,
-    loading : Boolean,
-    rightTop: @Composable() (() -> Unit)? = null,
-    leftTop: @Composable() (() -> Unit)? = null,
-    color : CardColors = CardDefaults.cardColors(containerColor = largeCardColor()),
-    content: @Composable () -> Unit
-) {
-    val speed = TransitionState.curveStyle.speedMs / 2
-    val scale = animateFloatAsState(
-        targetValue = if (loading) 0.9f else 1f, // 按下时为0.9，松开时为1
-        //animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
-        animationSpec = tween(speed, easing = LinearOutSlowInEasing),
-        label = "" // 使用弹簧动画
-    )
 
-    val scale2 = animateFloatAsState(
-        targetValue = if (loading) 0.97f else 1f, // 按下时为0.9，松开时为1
-        animationSpec = tween(speed, easing = LinearOutSlowInEasing),
-        label = "" // 使用弹簧动画
-    )
-
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = APP_HORIZONTAL_DP),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = APP_HORIZONTAL_DP, vertical = 5.dp).scale(scale2.value),
-        shape = MaterialTheme.shapes.medium,
-        colors = color
-    ) {
-        //下面的内容
-        Column (modifier = appBlur(loading).scale(scale.value)) {
-            TransplantListItem(
-                headlineContent = {
-                    Text(
-                        text = title,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontSize = 28.sp
-                    )
-                },
-                trailingContent = rightTop,
-                leadingContent = leftTop,
-                usePadding = false
-            )
-            content()
-        }
-    }
-}
 
 
