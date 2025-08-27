@@ -64,7 +64,7 @@ fun Modifier.transitionBackground(
 
     val scale = animateFloatAsState( //.875f
         targetValue = if (isExpanded) {
-            scale - if(level == TransitionLevel.HIGHEST) scaleDiffer else 0f
+            scale
         } else 1f,
         animationSpec = tween(speed*4/3, easing = FastOutSlowInEasing)
     )
