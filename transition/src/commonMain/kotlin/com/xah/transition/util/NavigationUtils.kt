@@ -22,10 +22,18 @@ fun NavController.navigateWithSave(route: String) {
 
 fun NavController.navigateAndSaveForTransition(route: String,transplantBackground : Boolean = false) {
     // 禁用背景透明
+    TransitionState.goOrBack = true
     TransitionState.transplantBackground = transplantBackground
 //    println("READY GO $route | CURRENT" + this.allRouteStack())
     navigateWithSave(route)
 //    println("GONE" + this.allRouteStack())
+}
+
+fun NavController.popBackStackForTransition() {
+    TransitionState.goOrBack = false
+    if(this.canPopBack()) {
+        this.popBackStack()
+    }
 }
 
 @Composable

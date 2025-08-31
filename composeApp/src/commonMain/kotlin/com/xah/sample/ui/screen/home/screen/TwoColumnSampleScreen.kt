@@ -161,7 +161,7 @@ fun RSampleScreen(
                         modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
                     )
                 },
-                cardModifier = Modifier.align(Alignment.Center).containerShare(sharedTransitionScope,animatedContentScope,route, resize = true)
+                cardModifier = Modifier.align(Alignment.Center).containerShare(sharedTransitionScope,animatedContentScope,route)
                 ,
                 modifier = Modifier.clickable {
                     onItemClick(route)

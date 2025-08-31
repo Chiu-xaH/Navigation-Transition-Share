@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.ScaleToBounds
@@ -23,55 +24,51 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import com.xah.transition.component.containerShare
 import com.xah.transition.state.TransitionState
 import com.xah.transition.style.DefaultTransitionStyle
 
-// 容器共享元素 注意：主界面（CustomScaffold）需要指定resize=false(已经在CustomScaffold指定了)，初始容器无需指定
+// 容器共享元素 如果两个容器颜色不同，可以启用渐变fade参数
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Modifier.containerShare(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     route : String,
-    resize : Boolean = true,
     roundShape : Shape = MaterialTheme.shapes.medium,
 ) : Modifier  {
-//    val tilt = animatedContentScope.transition.animateFloat (
-//        transitionSpec = { spring() },
-//        label = "tilt"
-//    ){ state ->
-//        if (state == EnterExitState.Visible) {
-//            0f
-//        } else {
-//            -20f
-//        }
-//    }
-    return with(sharedTransitionScope) {
-        this@containerShare.sharedBounds(
-            boundsTransform = BoundsTransform { _,_ ->
-                spring(
-                    dampingRatio = TransitionState.curveStyle.dampingRatio,
-                    stiffness = TransitionState.curveStyle.stiffness.toFloat(),
-                    visibilityThreshold = Rect.VisibilityThreshold
-                )
-            },
-            enter = fadeIn(animationSpec = tween(durationMillis = TransitionState.curveStyle.speedMs),),
-            exit = fadeOut(animationSpec = tween(durationMillis = TransitionState.curveStyle.speedMs),),
-            sharedContentState = rememberSharedContentState(key = "container_$route"),
-            animatedVisibilityScope = animatedContentScope,
-            resizeMode = if(resize) SharedTransitionScope.ResizeMode.RemeasureToBounds else ScaleToBounds(ContentScale.FillWidth, Center)
+    with(sharedTransitionScope) {
+        val state = rememberSharedContentState(key = "container_$route")
+        val transition = spring(
+            dampingRatio = TransitionState.curveStyle.dampingRatio,
+            stiffness = TransitionState.curveStyle.stiffness.toFloat(),
+            visibilityThreshold = Rect.VisibilityThreshold
         )
-//            .let {
-//                if(true) it.graphicsLayer {
-//                    rotationX = tilt.value
-//                    cameraDistance = 12 * density // 防止透视太夸张
-//                    transformOrigin = TransformOrigin(0.5f, 0f) // 从顶部开始旋转
-//                } else it
-//            }
+        val boundsTransform = BoundsTransform { _,_ ->
+            transition
+        }
+        return this@containerShare
+            .let {
+                if(TransitionState.useFade) {
+                    it.sharedBounds(
+                        boundsTransform = boundsTransform,
+                        sharedContentState = state,
+                        animatedVisibilityScope = animatedContentScope,
+                        enter = fadeIn(animationSpec = tween(durationMillis = TransitionState.curveStyle.speedMs)),
+                        exit = fadeOut(animationSpec = tween(durationMillis = TransitionState.curveStyle.speedMs)),
+                        resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
+                    )
+                } else {
+                    it.sharedElement(
+                        boundsTransform = boundsTransform,
+                        sharedContentState = state,
+                        animatedVisibilityScope = animatedContentScope,
+                    )
+                }
+            }
             .clip(roundShape)
     }
 }
-
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable

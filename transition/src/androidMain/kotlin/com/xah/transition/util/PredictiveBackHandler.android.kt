@@ -23,7 +23,7 @@ actual fun TransitionPredictiveBackHandler(
             }
             // code for completion
             onScale(0f)
-            navController.popBackStack()
+            navController.popBackStackForTransition()
         } catch (e: CancellationException) {
             // code for cancellation
             onScale(1f)

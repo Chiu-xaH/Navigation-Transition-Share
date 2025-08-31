@@ -78,7 +78,7 @@ fun IconSampleScreen(
                         onClick = {
                             navController.navigateAndSaveForTransition(route,true)
                         },
-                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope = animatedContentScope, route = route, resize = true)
+                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope = animatedContentScope, route = route)
                     ) {
                         Icon(
                             painterResource(Res.drawable.deployed_code),

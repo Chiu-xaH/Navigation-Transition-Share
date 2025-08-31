@@ -28,6 +28,7 @@ import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import com.xah.transition.util.canPopBack
+import com.xah.transition.util.popBackStackForTransition
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -52,9 +53,7 @@ fun SharedTransitionScope.TopBarNavigateIcon(
     }
 
     IconButton(onClick = {
-        if(navController.canPopBack()) {
-            navController.popBackStack()
-        }
+        navController.popBackStackForTransition()
     }) {
         Box() {
             AnimatedVisibility(
@@ -79,9 +78,7 @@ fun SharedTransitionScope.TopBarNavigateIcon(
 @Composable
 fun TopBarNavigateIcon(navController : NavController) {
     IconButton(onClick = {
-        if(navController.canPopBack()) {
-            navController.popBackStack()
-        }
+        navController.popBackStackForTransition()
     }) {
         Icon(painterResource(Res.drawable.arrow_back), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
     }

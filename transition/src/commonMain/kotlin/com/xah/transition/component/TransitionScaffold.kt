@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -48,7 +49,6 @@ fun SharedTransitionScope.TransitionScaffold(
             this,
         animatedContentScope,
         route,
-        resize = true,
         roundShape,
     ),
     topBar: @Composable (() -> Unit) = {},
@@ -104,9 +104,10 @@ fun SharedTransitionScope.TransitionScaffold(
             show = true
         }
     }
+    val targetColor =  containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface
 
     Scaffold(
-        containerColor =  containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface,
+        containerColor =  targetColor,
         modifier = modifier.scale(scale),
         topBar = topBar,
         bottomBar = {

@@ -1,7 +1,14 @@
 package com.xah.sample.ui.screen
 
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -15,6 +22,7 @@ import com.xah.sample.ui.screen.detail.DetailScreen
 import com.xah.sample.ui.screen.detail.DetailScreenR
 import com.xah.sample.ui.screen.home.HomeScreen
 import com.xah.sample.ui.screen.settings.SettingsScreen
+import com.xah.transition.state.TransitionState
 import com.xah.transition.style.DefaultTransitionStyle
 import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -42,12 +50,18 @@ fun AppNavHost() {
             navController = navController,
             startDestination = firstRoute,
             enterTransition = {
-                DefaultTransitionStyle.fadeAnimation.enter
+                fadeIn(
+                    animationSpec = tween(durationMillis = TransitionState.curveStyle.speedMs ),
+                )
             },
             exitTransition = {
-                DefaultTransitionStyle.fadeAnimation.exit
+                fadeOut(
+                    animationSpec = tween(durationMillis = TransitionState.curveStyle.speedMs ),
+                )
             },
-        ) {
+//            enterTransition = { DefaultTransitionStyle.fadeAnimation.enter },
+//            exitTransition = { DefaultTransitionStyle.fadeAnimation.exit },
+            ) {
             composable(firstRoute) {
                 HomeScreen(
                     navController,

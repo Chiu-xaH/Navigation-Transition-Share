@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import com.xah.transition.util.popBackStackForTransition
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.deployed_code
 import com.xah.sample.logic.model.ui.ScreenRoute
@@ -59,7 +60,7 @@ fun DetailScreen(
             }
         ) { innerPadding ->
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-                Button (onClick = { navHostController.popBackStack() }, modifier = Modifier.align(Alignment.Center)) {
+                Button (onClick = { navHostController.popBackStackForTransition() }, modifier = Modifier.align(Alignment.Center)) {
                     Text("界面 $route")
                 }
             }
@@ -105,14 +106,14 @@ fun DetailScreenR(
                                 modifier = Modifier.iconElementShare(this@with,animatedContentScope=animatedContentScope, route = newRoute)
                     )
                         },
-                        cardModifier = Modifier.align(Alignment.Center).containerShare(this@with,animatedContentScope,newRoute, resize = true),
+                        cardModifier = Modifier.align(Alignment.Center).containerShare(this@with,animatedContentScope,newRoute),
                         color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier.clickable {
                             navHostController.navigateAndSaveForTransition(newRoute)
                         }
                     )
                 } else {
-                    Button(onClick = { navHostController.popBackStack() }, modifier = Modifier.align(Alignment.Center)) {
+                    Button(onClick = { navHostController.popBackStackForTransition() }, modifier = Modifier.align(Alignment.Center)) {
                         Text("返回")
                     }
                 }
