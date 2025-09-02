@@ -59,8 +59,21 @@ fun SharedTransitionScope.TransitionScaffold(
     enablePredictive : Boolean = true,
     content: @Composable ((PaddingValues) -> Unit)
 ) {
-    var scale by remember { mutableStateOf(1f) }
+    if(route in TransitionState.firstStartRoute) {
+        // 首页 无需进行延迟显示
+        Scaffold(
+            containerColor = containerColor ?:  MaterialTheme.colorScheme.surface,
+            topBar = topBar,
+            bottomBar = bottomBar,
+            floatingActionButton = floatingActionButton,
+            floatingActionButtonPosition = floatingActionButtonPosition,
+        ) { innerPadding ->
+            content(innerPadding)
+        }
+        return
+    }
 
+    var scale by remember { mutableStateOf(1f) }
 
     val speed = TransitionState.curveStyle.speedMs
     // 当从CustomScaffold1向CustomScaffold2时，CustomScaffold2先showSurface=false再true，而CustomScaffold1一直为true
