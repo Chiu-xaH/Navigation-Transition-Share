@@ -62,6 +62,7 @@ fun SharedTransitionScope.TransitionScaffold(
     if(route in TransitionState.firstStartRoute) {
         // 首页 无需进行延迟显示
         Scaffold(
+            modifier = modifier,
             containerColor = containerColor ?:  MaterialTheme.colorScheme.surface,
             topBar = topBar,
             bottomBar = bottomBar,
