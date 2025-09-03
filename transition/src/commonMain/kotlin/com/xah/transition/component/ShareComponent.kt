@@ -38,6 +38,7 @@ fun Modifier.containerShare(
     roundShape : Shape = MaterialTheme.shapes.medium,
 ) : Modifier  {
     with(sharedTransitionScope) {
+        val isAnimating = this.isTransitionActive
         val state = rememberSharedContentState(key = "container_$route")
         val transition = spring(
             dampingRatio = TransitionState.curveStyle.dampingRatio,
@@ -66,7 +67,7 @@ fun Modifier.containerShare(
                     )
                 }
             }
-            .clip(roundShape)
+            .let { if(isAnimating) it.clip(roundShape) else it }
     }
 }
 
