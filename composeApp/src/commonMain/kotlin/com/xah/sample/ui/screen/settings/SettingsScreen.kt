@@ -74,7 +74,7 @@ fun SettingsScreen(
                 TopAppBar(
                     title = { Text("设置") },
                     navigationIcon = {
-                        TopBarNavigateIcon(navController,animatedContentScope,route, Res.drawable.settings)
+                        TopBarNavigateIcon(navController,animatedContentScope,route, painterResource(Res.drawable.settings))
                     },
                     colors = topBarTransplantColor(),
                 )

@@ -35,7 +35,7 @@ fun Modifier.containerShare(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     route : String,
-    roundShape : Shape = MaterialTheme.shapes.medium,
+    roundShape : Shape = MaterialTheme.shapes.small,
 ) : Modifier  {
     with(sharedTransitionScope) {
         val isAnimating = this.isTransitionActive

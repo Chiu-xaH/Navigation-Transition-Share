@@ -49,7 +49,7 @@ fun DetailScreen(
             topBar = {
                 TopAppBar(
                     navigationIcon = {
-                        TopBarNavigateIcon(navHostController,animatedContentScope,route, Res.drawable.deployed_code)
+                        TopBarNavigateIcon(navHostController,animatedContentScope,route, painterResource(Res.drawable.deployed_code))
                     },
                     title = { Text(
                         route,
@@ -86,7 +86,7 @@ fun DetailScreenR(
             topBar = {
                 TopAppBar(
                     navigationIcon = {
-                        TopBarNavigateIcon(navHostController,animatedContentScope,route, Res.drawable.deployed_code)
+                        TopBarNavigateIcon(navHostController,animatedContentScope,route, painterResource(Res.drawable.deployed_code))
                     },
                     title = { Text(route) },
                     colors = topBarTransplantColor(),

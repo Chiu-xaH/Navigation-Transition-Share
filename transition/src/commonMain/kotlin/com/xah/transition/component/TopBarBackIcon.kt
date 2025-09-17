@@ -18,17 +18,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import animationsample.transition.generated.resources.Res
-import animationsample.transition.generated.resources.arrow_back
 import com.xah.transition.state.TransitionState
 import com.xah.transition.style.DefaultTransitionStyle
-import kotlinx.coroutines.delay
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
-import com.xah.transition.util.canPopBack
 import com.xah.transition.util.popBackStackForTransition
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -36,7 +32,7 @@ fun SharedTransitionScope.TopBarNavigateIcon(
     navController : NavHostController,
     animatedContentScope: AnimatedContentScope,
     route : String,
-    icon :  DrawableResource,
+    icon :  Painter,
     restoreIcon : Boolean = true
 ) {
     val speed = TransitionState.curveStyle.speedMs
@@ -61,7 +57,7 @@ fun SharedTransitionScope.TopBarNavigateIcon(
                 enter = DefaultTransitionStyle.centerAllAnimation.enter,
                 exit = DefaultTransitionStyle.centerAllAnimation.exit
             ) {
-                Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.primary,modifier = Modifier.iconElementShare(this@TopBarNavigateIcon,animatedContentScope = animatedContentScope, route = route))
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary,modifier = Modifier.iconElementShare(this@TopBarNavigateIcon,animatedContentScope = animatedContentScope, route = route))
             }
             AnimatedVisibility(
                 visible = !show,
@@ -75,12 +71,13 @@ fun SharedTransitionScope.TopBarNavigateIcon(
 }
 
 
+
 @Composable
 fun TopBarNavigateIcon(navController : NavController) {
     IconButton(onClick = {
         navController.popBackStackForTransition()
     }) {
-        Icon(painterResource(Res.drawable.arrow_back), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+        Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
     }
 }
 

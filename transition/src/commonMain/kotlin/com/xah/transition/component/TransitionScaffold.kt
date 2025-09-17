@@ -4,13 +4,10 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -18,7 +15,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,10 +43,10 @@ fun SharedTransitionScope.TransitionScaffold(
     modifier: Modifier = Modifier.clip(roundShape)
         .transitionBackground(navHostController, route).containerShare(
             this,
-        animatedContentScope,
-        route,
-        roundShape,
-    ),
+            animatedContentScope,
+            route,
+            roundShape,
+        ),
     topBar: @Composable (() -> Unit) = {},
     bottomBar: @Composable (() -> Unit) = {},
     floatingActionButton: @Composable (() -> Unit) = {},
@@ -105,12 +101,9 @@ fun SharedTransitionScope.TransitionScaffold(
         }
     }
 
-    if(useBackHandler && enablePredictive) {
-        TransitionPredictiveBackHandler(navHostController) {
-            scale = it
-        }
+    TransitionPredictiveBackHandler(navHostController,useBackHandler && enablePredictive) {
+        scale = it
     }
-
 
     // 回退后恢复上一个页面的显示状态
     LaunchedEffect(isPreviousEntry) {
@@ -142,6 +135,91 @@ fun SharedTransitionScope.TransitionScaffold(
             exit = fadeOut(tween(durationMillis = 0))
         ) {
             content(innerPadding)
+        }
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.TransitionSurface(
+    animatedContentScope: AnimatedContentScope,
+    roundShape : Shape = MaterialTheme.shapes.medium,
+    route: String,
+    navHostController : NavHostController,
+    modifier: Modifier = Modifier.clip(roundShape)
+        .transitionBackground(navHostController, route).containerShare(
+            this,
+            animatedContentScope,
+            route,
+            roundShape,
+        ),
+    containerColor : Color? = null,
+    enablePredictive : Boolean = true,
+    content: @Composable (() -> Unit)
+) {
+    if(route in TransitionState.firstStartRoute) {
+        // 首页 无需进行延迟显示
+        Surface(
+            modifier = modifier,
+            color = containerColor ?: Color.Transparent,
+            content = content
+        )
+        return
+    }
+
+    var scale by remember { mutableStateOf(1f) }
+
+    val speed = TransitionState.curveStyle.speedMs
+    // 当从CustomScaffold1向CustomScaffold2时，CustomScaffold2先showSurface=false再true，而CustomScaffold1一直为true
+    val isCurrentEntry = navHostController.isCurrentRouteWithoutArgs(route)
+    val isPreviousEntry = navHostController.previousRouteWithArgWithoutValues() == route
+    // 当回退时，即从CustomScaffold2回CustomScaffold1时，CustomScaffold2立刻showSurface=false，而CustomScaffold1一直为true
+    var show by rememberSaveable(route) { mutableStateOf(false) }
+
+    LaunchedEffect(isCurrentEntry) {
+        // 当前页面首次进入时播放动画
+        if (isCurrentEntry && !show) {
+            show = false
+            delay(speed * 1L)
+            show = true
+        } else if(show) {
+            if(navHostController.isInBottom(route)) {
+                return@LaunchedEffect
+            }
+            show = false
+        }
+    }
+
+    var useBackHandler by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if(useBackHandler == false) {
+            delay(speed*1L)
+            useBackHandler = true
+        }
+    }
+
+    TransitionPredictiveBackHandler(navHostController,useBackHandler && enablePredictive) {
+        scale = it
+    }
+
+    // 回退后恢复上一个页面的显示状态
+    LaunchedEffect(isPreviousEntry) {
+        if (isPreviousEntry) {
+            show = true
+        }
+    }
+    val targetColor =  containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface
+
+    Surface(
+        color =  targetColor,
+        modifier = modifier.scale(scale),
+    ) {
+        AnimatedVisibility(
+            visible = show,
+            enter  = if(speed == 0) fadeIn(tween(durationMillis = 0)) else fadeIn(),
+            exit = fadeOut(tween(durationMillis = 0))
+        ) {
+            content()
         }
     }
 }

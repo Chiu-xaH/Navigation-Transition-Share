@@ -12,9 +12,10 @@ private const val targetScale = 0.075f
 @Composable
 actual fun TransitionPredictiveBackHandler(
     navController : NavHostController,
+    enable : Boolean,
     onScale: (Float) -> Unit
 ) {
-    PredictiveBackHandler(navController.allRouteStack().size > 1) { progress: Flow<BackEventCompat> ->
+    PredictiveBackHandler(navController.allRouteStack().size > 1 && enable) { progress: Flow<BackEventCompat> ->
         // code for gesture back started
         try {
             progress.collect { backEvent ->
