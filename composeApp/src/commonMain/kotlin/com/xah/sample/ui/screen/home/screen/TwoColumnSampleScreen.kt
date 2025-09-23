@@ -1,8 +1,6 @@
 package com.xah.sample.ui.screen.home.screen
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -41,8 +39,6 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TwoColumnSampleScreen(
     navController : NavHostController,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onItemClick: (String) -> Unit,
 ) {
     // 用于回退时保存滑动位置
@@ -85,8 +81,6 @@ fun TwoColumnSampleScreen(
     SharedTopBar(
         title = "双列样式",
         navController = navController,
-        sharedTransitionScope = sharedTransitionScope,
-        animatedContentScope = animatedContentScope,
     ) { innerPadding ->
         LazyVerticalGrid(
             state = scrollState,
@@ -99,7 +93,7 @@ fun TwoColumnSampleScreen(
             items(func.size, key = { func[it] }) { index ->
                 val route = func[index]
                 SmallCard(
-                    modifier = Modifier.padding( 3.dp).containerShare(sharedTransitionScope,animatedContentScope,route)
+                    modifier = Modifier.padding( 3.dp).containerShare(route)
                     ,
                     color = MaterialTheme.colorScheme.primaryContainer
                 ) {
@@ -111,7 +105,7 @@ fun TwoColumnSampleScreen(
                             Icon(
                                 painterResource(Res.drawable.deployed_code),
                                 null,
-                                modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
+                                modifier = Modifier.iconElementShare( route = route)
                             )
                         },
                         modifier = Modifier.clickable {
@@ -139,8 +133,6 @@ fun TwoColumnSampleScreen(
 @Composable
 fun RSampleScreen(
     navController : NavHostController,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onItemClick: (String) -> Unit,
 ) {
     // 用于回退时保存滑动位置
@@ -148,8 +140,6 @@ fun RSampleScreen(
     SharedTopBar(
         title = "递归嵌套",
         navController = navController,
-        sharedTransitionScope = sharedTransitionScope,
-        animatedContentScope = animatedContentScope,
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
             StyleCardListItem(
@@ -158,10 +148,10 @@ fun RSampleScreen(
                     Icon(
                         painterResource(Res.drawable.deployed_code),
                         null,
-                        modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
+                        modifier = Modifier.iconElementShare( route = route)
                     )
                 },
-                cardModifier = Modifier.align(Alignment.Center).containerShare(sharedTransitionScope,animatedContentScope,route)
+                cardModifier = Modifier.align(Alignment.Center).containerShare(route)
                 ,
                 modifier = Modifier.clickable {
                     onItemClick(route)

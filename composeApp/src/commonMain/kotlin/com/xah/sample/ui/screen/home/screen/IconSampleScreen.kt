@@ -1,8 +1,6 @@
 package com.xah.sample.ui.screen.home.screen
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +31,6 @@ import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.DividerTextExpandedWith
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
 import com.xah.sample.ui.style.RowHorizontal
-import com.xah.sample.viewmodel.UIViewModel
 import com.xah.transition.component.containerShare
 import com.xah.transition.component.iconElementShare
 import com.xah.transition.util.navigateAndSaveForTransition
@@ -43,8 +40,6 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun IconSampleScreen(
     navController : NavHostController,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
 ) {
     val func2 = remember {
         listOf(
@@ -66,8 +61,6 @@ fun IconSampleScreen(
     SharedTopBar(
         title = "图标与按钮",
         navController = navController,
-        sharedTransitionScope = sharedTransitionScope,
-        animatedContentScope = animatedContentScope,
     ) { innerPadding ->
         Column(modifier = Modifier.verticalScroll(scrollState)) {
             Spacer(Modifier.height(innerPadding.calculateTopPadding()).statusBarsPadding())
@@ -78,26 +71,24 @@ fun IconSampleScreen(
                         onClick = {
                             navController.navigateAndSaveForTransition(route,true)
                         },
-                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope = animatedContentScope, route = route)
+                        modifier = Modifier.containerShare(route = route)
                     ) {
                         Icon(
                             painterResource(Res.drawable.deployed_code),
                             null,
                             tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
+                            modifier = Modifier.iconElementShare(route = route)
                         )
                     }
                     Spacer(Modifier.width(APP_HORIZONTAL_DP))
-                    with(sharedTransitionScope) {
-                        val route = func2[1]
-                        TextButton(
-                            onClick = {
-                                navController.navigateAndSaveForTransition(route,true)
-                            },
-                            modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
-                        ) {
-                            Text("按钮")
-                        }
+                    val routeP = func2[1]
+                    TextButton(
+                        onClick = {
+                            navController.navigateAndSaveForTransition(routeP,true)
+                        },
+                        modifier = Modifier.containerShare(route = routeP)
+                    ) {
+                        Text("按钮")
                     }
                 }
             }
@@ -109,12 +100,12 @@ fun IconSampleScreen(
                         onClick = {
                             navController.navigateAndSaveForTransition(route)
                         },
-                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route)
+                        modifier = Modifier.containerShare(route=route)
                     ) {
                         Icon(
                             painterResource(Res.drawable.deployed_code),
                             null,
-                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route)
+                            modifier = Modifier.iconElementShare(  route = route)
                         )
                     }
                     Spacer(Modifier.width(APP_HORIZONTAL_DP))
@@ -123,12 +114,12 @@ fun IconSampleScreen(
                         onClick = {
                             navController.navigateAndSaveForTransition(route2)
                         },
-                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route2, roundShape = CircleShape)
+                        modifier = Modifier.containerShare(route=route2, roundShape = CircleShape)
                     ) {
                         Icon(
                             painterResource(Res.drawable.deployed_code),
                             null,
-                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route2)
+                            modifier = Modifier.iconElementShare(  route = route2)
                         )
                     }
                     Spacer(Modifier.width(APP_HORIZONTAL_DP))
@@ -141,7 +132,7 @@ fun IconSampleScreen(
                         Icon(
                             painterResource(Res.drawable.deployed_code),
                             null,
-                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route3,)
+                            modifier = Modifier.iconElementShare(  route = route3,)
                         )
                     }
                 }

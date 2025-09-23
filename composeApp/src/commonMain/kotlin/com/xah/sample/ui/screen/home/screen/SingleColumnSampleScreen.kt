@@ -1,38 +1,28 @@
 package com.xah.sample.ui.screen.home.screen
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import animationsample.composeapp.generated.resources.Res
 import animationsample.composeapp.generated.resources.deployed_code
 import com.xah.sample.logic.model.ui.ScreenRoute
 import com.xah.sample.ui.component.APP_HORIZONTAL_DP
 import com.xah.sample.ui.component.CARD_NORMAL_DP
-import com.xah.sample.ui.component.MyCustomCard
 import com.xah.sample.ui.component.StyleCardListItem
-import com.xah.sample.ui.component.TransplantListItem
 import com.xah.sample.ui.screen.home.screen.common.SharedTopBar
 import com.xah.transition.component.containerShare
 import com.xah.transition.component.iconElementShare
@@ -42,8 +32,6 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun SingleColumnSampleScreen(
     navController : NavHostController,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onItemClick: (String) -> Unit,
 ) {
     // 用于回退时保存滑动位置
@@ -80,15 +68,13 @@ fun SingleColumnSampleScreen(
     SharedTopBar(
         title = "单列样式",
         navController = navController,
-        sharedTransitionScope = sharedTransitionScope,
-        animatedContentScope = animatedContentScope,
     ) { innerPadding ->
         LazyColumn(state = scrollState) {
             item { Spacer(Modifier.height(innerPadding.calculateTopPadding()).statusBarsPadding()) }
             items(func.size, key = { func[it] }) { index ->
                 val route = func[index]
                 StyleCardListItem(
-                    cardModifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route) ,
+                    cardModifier = Modifier.containerShare(route=route) ,
                     color = MaterialTheme.colorScheme.primaryContainer,
                     headlineContent = { Text(route) },
                     supportingContent = { Text("内容$index")},
@@ -96,7 +82,7 @@ fun SingleColumnSampleScreen(
                         Icon(
                             painterResource(Res.drawable.deployed_code),
                             null,
-                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route)
+                            modifier = Modifier.iconElementShare(  route = route)
                         )
                     },
                     modifier = Modifier.clickable {
@@ -108,7 +94,7 @@ fun SingleColumnSampleScreen(
             items(func2.size, key = { func2[it] }) { index ->
                 val route = func2[index]
                 ListItem(
-                    modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route)
+                    modifier = Modifier.containerShare(route=route)
                         .clickable {
                             onItemClick(route)
                         },
@@ -117,7 +103,7 @@ fun SingleColumnSampleScreen(
                         Icon(
                             painterResource(Res.drawable.deployed_code),
                             null,
-                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope,  route = route)
+                            modifier = Modifier.iconElementShare(  route = route)
                         )
                     },
                     supportingContent = {

@@ -39,8 +39,6 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun HomeScreen(
     navController : NavHostController,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onItemClick: (String) -> Unit,
 ) {
     val barItems = listOf(
@@ -103,16 +101,16 @@ fun HomeScreen(
             exitTransition = { MyAnimationManager.getCenterAnimation().exit }
         ) {
             composable(HomeScreenRoute.TwoColumnSampleScreen.route) {
-                TwoColumnSampleScreen(navController,sharedTransitionScope,animatedContentScope,onItemClick)
+                TwoColumnSampleScreen(navController,onItemClick)
             }
             composable(HomeScreenRoute.SingleColumnSampleScreen.route) {
-                SingleColumnSampleScreen(navController,sharedTransitionScope,animatedContentScope,onItemClick)
+                SingleColumnSampleScreen(navController,onItemClick)
             }
             composable(HomeScreenRoute.IconSampleScreen.route) {
-                IconSampleScreen(navController,sharedTransitionScope,animatedContentScope)
+                IconSampleScreen(navController)
             }
             composable(HomeScreenRoute.RSampleScreen.route) {
-                RSampleScreen(navController,sharedTransitionScope,animatedContentScope,onItemClick)
+                RSampleScreen(navController,onItemClick)
             }
         }
     }

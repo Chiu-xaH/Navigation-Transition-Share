@@ -1,8 +1,6 @@
 package com.xah.sample.ui.screen.home.screen.common
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,8 +30,6 @@ import org.jetbrains.compose.resources.painterResource
 fun SharedTopBar(
     title : String,
     navController : NavHostController,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     content : @Composable ((PaddingValues) -> Unit)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -50,13 +46,13 @@ fun SharedTopBar(
                         onClick = {
                             navController.navigateAndSaveForTransition(route,true)
                         },
-                        modifier = Modifier.containerShare(sharedTransitionScope,animatedContentScope=animatedContentScope,route=route)
+                        modifier = Modifier.containerShare(route=route)
                     ) {
                         Icon(
                             painterResource(Res.drawable.settings),
                             null,
                             tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.iconElementShare(sharedTransitionScope,animatedContentScope=animatedContentScope, route = route)
+                            modifier = Modifier.iconElementShare(route = route)
                         )
                     }
                 },
