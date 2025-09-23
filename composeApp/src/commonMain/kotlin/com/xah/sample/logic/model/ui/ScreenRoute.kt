@@ -1,7 +1,7 @@
 package com.xah.sample.logic.model.ui
 
 sealed class ScreenRoute(val route: String) {
-    data object HomeScreen : ScreenRoute("/home")
+    data object HomeScreen : ScreenRoute("HOME")
     data object SettingsScreen : ScreenRoute("/cube")
     data object ModuleScreen : ScreenRoute("/module")
     data object Module1Screen : ScreenRoute("/module1")
