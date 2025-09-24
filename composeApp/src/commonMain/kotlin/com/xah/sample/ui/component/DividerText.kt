@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,9 +29,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import com.xah.sample.ui.util.MyAnimationManager
-import com.xah.sample.viewmodel.UIViewModel
-import com.xah.transition.state.TransitionState
+import com.xah.transition.state.TransitionConfig
 
 val DIVIDER_TEXT_VERTICAL_PADDING = 9.dp
 // 小标题
@@ -41,7 +38,7 @@ fun DividerText(text: String, onClick: (() -> Unit?)? = null) {
     var isPressed by remember { mutableStateOf(false) }
     val scale = animateFloatAsState(
         targetValue = if (isPressed) 0.9f else 1f, // 按下时为0.9，松开时为1
-        animationSpec = tween(TransitionState.curveStyle.speedMs / 2, easing = LinearOutSlowInEasing),
+        animationSpec = tween(TransitionConfig.curveStyle.speedMs / 2, easing = LinearOutSlowInEasing),
         label = "" // 使用弹簧动画
     )
     val color by animateColorAsState(
@@ -81,7 +78,7 @@ fun DividerTextExpandedWith(
 ) {
 
 
-    val speed = TransitionState.curveStyle.speedMs
+    val speed = TransitionConfig.curveStyle.speedMs
 
     var expanded by remember { mutableStateOf(defaultIsExpanded) }
     fun set() {

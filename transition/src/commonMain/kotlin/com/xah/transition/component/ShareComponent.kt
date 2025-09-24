@@ -16,7 +16,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Shape
 import com.xah.transition.state.LocalAnimatedContentScope
 import com.xah.transition.state.LocalSharedTransitionScope
-import com.xah.transition.state.TransitionState
+import com.xah.transition.state.TransitionConfig
 
 // 容器共享元素 如果两个容器颜色不同，可以启用渐变fade参数
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -31,8 +31,8 @@ fun Modifier.containerShare(
         val isAnimating = this.isTransitionActive
         val state = rememberSharedContentState(key = "container_$route")
         val transition = spring(
-            dampingRatio = TransitionState.curveStyle.dampingRatio,
-            stiffness = TransitionState.curveStyle.stiffness.toFloat(),
+            dampingRatio = TransitionConfig.curveStyle.dampingRatio,
+            stiffness = TransitionConfig.curveStyle.stiffness.toFloat(),
             visibilityThreshold = Rect.VisibilityThreshold
         )
         val boundsTransform = BoundsTransform { _,_ ->
@@ -40,13 +40,13 @@ fun Modifier.containerShare(
         }
         return this@containerShare
             .let {
-                if(TransitionState.useFade) {
+                if(TransitionConfig.useFade) {
                     it.sharedBounds(
                         boundsTransform = boundsTransform,
                         sharedContentState = state,
                         animatedVisibilityScope = animatedContentScope,
-                        enter = fadeIn(animationSpec = tween(durationMillis = TransitionState.curveStyle.speedMs)),
-                        exit = fadeOut(animationSpec = tween(durationMillis = TransitionState.curveStyle.speedMs)),
+                        enter = fadeIn(animationSpec = tween(durationMillis = TransitionConfig.curveStyle.speedMs)),
+                        exit = fadeOut(animationSpec = tween(durationMillis = TransitionConfig.curveStyle.speedMs)),
                         resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
                     )
                 } else {
@@ -73,8 +73,8 @@ fun Modifier.singleElementShare(
         this@singleElementShare.sharedElement(
             boundsTransform = BoundsTransform { _,_ ->
                 spring(
-                    dampingRatio = TransitionState.curveStyle.dampingRatio,
-                    stiffness = TransitionState.curveStyle.stiffness.toFloat(),
+                    dampingRatio = TransitionConfig.curveStyle.dampingRatio,
+                    stiffness = TransitionConfig.curveStyle.stiffness.toFloat(),
                     visibilityThreshold = Rect.VisibilityThreshold
                 )
             },

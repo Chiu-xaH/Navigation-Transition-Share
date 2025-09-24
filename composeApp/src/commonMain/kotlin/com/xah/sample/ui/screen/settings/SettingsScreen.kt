@@ -37,7 +37,7 @@ import com.xah.transition.component.TopBarNavigateIcon
 import com.xah.transition.component.TransitionScaffold
 import com.xah.transition.component.containerShare
 import com.xah.transition.component.iconElementShare
-import com.xah.transition.state.TransitionState
+import com.xah.transition.state.TransitionConfig
 import com.xah.transition.style.TransitionLevel
 import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.resources.painterResource
@@ -51,9 +51,9 @@ fun SettingsScreen(
 ) {
     val route = remember { ScreenRoute.SettingsScreen.route }
 
-    var transition by remember { mutableStateOf(TransitionState.transitionBackgroundStyle.level) }
+    var transition by remember { mutableStateOf(TransitionConfig.transitionBackgroundStyle.level) }
     LaunchedEffect(transition) {
-         TransitionState.transitionBackgroundStyle.level = transition
+         TransitionConfig.transitionBackgroundStyle.level = transition
     }
 
     TransitionScaffold(

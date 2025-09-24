@@ -2,7 +2,6 @@ package com.xah.transition.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -24,8 +23,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.navigation.NavHostController
-import com.xah.transition.state.LocalSharedTransitionScope
-import com.xah.transition.state.TransitionState
+import com.xah.transition.state.TransitionConfig
 import com.xah.transition.style.transitionBackground
 import com.xah.transition.util.TransitionPredictiveBackHandler
 import com.xah.transition.util.isCurrentRouteWithoutArgs
@@ -52,7 +50,7 @@ fun TransitionScaffold(
     enablePredictive : Boolean = true,
     content: @Composable ((PaddingValues) -> Unit)
 ) {
-    if(route in TransitionState.firstStartRoute) {
+    if(route in TransitionConfig.firstStartRoute) {
         // 首页 无需进行延迟显示
         Scaffold(
             modifier = modifier,
@@ -69,7 +67,7 @@ fun TransitionScaffold(
 
     var scale by remember { mutableStateOf(1f) }
 
-    val speed = TransitionState.curveStyle.speedMs
+    val speed = TransitionConfig.curveStyle.speedMs
     // 当从CustomScaffold1向CustomScaffold2时，CustomScaffold2先showSurface=false再true，而CustomScaffold1一直为true
     val isCurrentEntry = navHostController.isCurrentRouteWithoutArgs(route)
     val isPreviousEntry = navHostController.previousRouteWithArgWithoutValues() == route
@@ -108,7 +106,7 @@ fun TransitionScaffold(
             show = true
         }
     }
-    val targetColor =  containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface
+    val targetColor =  containerColor ?: if(TransitionConfig.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface
 
     Scaffold(
         containerColor =  targetColor,
@@ -151,7 +149,7 @@ fun TransitionSurface(
     enablePredictive : Boolean = true,
     content: @Composable (() -> Unit)
 ) {
-    if(route in TransitionState.firstStartRoute) {
+    if(route in TransitionConfig.firstStartRoute) {
         // 首页 无需进行延迟显示
         Surface(
             modifier = modifier,
@@ -163,7 +161,7 @@ fun TransitionSurface(
 
     var scale by remember { mutableStateOf(1f) }
 
-    val speed = TransitionState.curveStyle.speedMs
+    val speed = TransitionConfig.curveStyle.speedMs
     // 当从CustomScaffold1向CustomScaffold2时，CustomScaffold2先showSurface=false再true，而CustomScaffold1一直为true
     val isCurrentEntry = navHostController.isCurrentRouteWithoutArgs(route)
     val isPreviousEntry = navHostController.previousRouteWithArgWithoutValues() == route
@@ -202,7 +200,7 @@ fun TransitionSurface(
             show = true
         }
     }
-    val targetColor =  containerColor ?: if(TransitionState.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface
+    val targetColor =  containerColor ?: if(TransitionConfig.transplantBackground) Color.Transparent else MaterialTheme.colorScheme.surface
 
     Surface(
         color =  targetColor,

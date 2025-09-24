@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.xah.transition.state.TransitionState
+import com.xah.transition.state.TransitionConfig
 
 @Composable
 fun MyCustomCard(
@@ -149,7 +149,7 @@ fun AnimationCardListItem(
     LaunchedEffect(index) {
         animatedProgress.animateTo(
             targetValue = 1f,
-            animationSpec = tween(TransitionState.curveStyle.speedMs, easing = EaseInOutQuad)
+            animationSpec = tween(TransitionConfig.curveStyle.speedMs, easing = EaseInOutQuad)
         )
     }
     StyleCardListItem(
@@ -180,7 +180,7 @@ fun AnimationCustomCard(
     LaunchedEffect(index) {
         animatedProgress.animateTo(
             targetValue = 1f,
-            animationSpec = tween(TransitionState.curveStyle.speedMs, easing = EaseInOutQuad)
+            animationSpec = tween(TransitionConfig.curveStyle.speedMs, easing = EaseInOutQuad)
         )
     }
 

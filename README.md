@@ -1,6 +1,6 @@
-# Transition Sample On Compose Multiplatform
+# Navigation-Transition-Share
 
-使用Compose Multiplatform创建的一个转场动画示例
+使用Compose Multiplatform对Navigation和Modifier.shareElement/shareBounds封装创建的一个容器过渡转场动画，支持在NavHost下无限打开N级界面，有四档背景特效调节(模糊、缩放、压暗)
 
 ## 平台
 Wasm(JS)、Desktop(JVM)、iOS、Android
@@ -23,4 +23,8 @@ Wasm(JS)、Desktop(JVM)、iOS、Android
 ### 演示
 ![截图](/src/shot.jpg)
 
-### Import 模块 :transition 即可食用 [具体使用案例](https://github.com/Chiu-xaH/HFUT-Schedule)
+
+### Import 模块 :transition
+[具体使用案例](https://github.com/Chiu-xaH/HFUT-Schedule)
+
+![截图](/src/shot2.jpg)

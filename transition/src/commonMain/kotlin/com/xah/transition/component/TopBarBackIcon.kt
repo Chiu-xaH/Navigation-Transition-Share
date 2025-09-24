@@ -2,7 +2,6 @@ package com.xah.transition.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.xah.transition.state.TransitionState
+import com.xah.transition.state.TransitionConfig
 import com.xah.transition.style.DefaultTransitionStyle
 import com.xah.transition.util.popBackStackForTransition
 import kotlinx.coroutines.delay
@@ -33,9 +32,9 @@ fun TopBarNavigateIcon(
     icon :  Painter,
     restoreIcon : Boolean = true
 ) {
-    val speed = TransitionState.curveStyle.speedMs
+    val speed = TransitionConfig.curveStyle.speedMs
     var show by remember { mutableStateOf(true) }
-    if(!TransitionState.transplantBackground) {
+    if(!TransitionConfig.transplantBackground) {
         LaunchedEffect(Unit) {
             show = true
             delay(speed*1L)
