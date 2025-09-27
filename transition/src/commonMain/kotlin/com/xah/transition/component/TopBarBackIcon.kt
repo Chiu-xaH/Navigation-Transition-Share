@@ -2,6 +2,7 @@ package com.xah.transition.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.xah.transition.state.LocalSharedTransitionScope
 import com.xah.transition.state.TransitionConfig
 import com.xah.transition.style.DefaultTransitionStyle
 import com.xah.transition.util.popBackStackForTransition
@@ -32,12 +34,12 @@ fun TopBarNavigateIcon(
     icon :  Painter,
     restoreIcon : Boolean = true
 ) {
-    val speed = TransitionConfig.curveStyle.speedMs
+    val sharedTransitionScope = LocalSharedTransitionScope.current
     var show by remember { mutableStateOf(true) }
     if(!TransitionConfig.transplantBackground) {
         LaunchedEffect(Unit) {
             show = true
-            delay(speed*1L)
+            sharedTransitionScope.awaitTransition()
             delay(1500L)
             show = false
             if(restoreIcon) {
@@ -46,6 +48,7 @@ fun TopBarNavigateIcon(
             }
         }
     }
+
 
     IconButton(onClick = {
         navController.popBackStackForTransition()

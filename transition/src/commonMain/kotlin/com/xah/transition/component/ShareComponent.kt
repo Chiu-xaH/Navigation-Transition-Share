@@ -30,14 +30,16 @@ fun Modifier.containerShare(
     with(sharedTransitionScope) {
         val isAnimating = this.isTransitionActive
         val state = rememberSharedContentState(key = "container_$route")
-        val transition = spring(
+        val exitTransition = spring(
             dampingRatio = TransitionConfig.curveStyle.dampingRatio,
             stiffness = TransitionConfig.curveStyle.stiffness.toFloat(),
             visibilityThreshold = Rect.VisibilityThreshold
         )
+//        val enterTransition = tween<Int>(durationMillis = TransitionConfig.curveStyle.speedMs)
         val boundsTransform = BoundsTransform { _,_ ->
-            transition
+            exitTransition
         }
+
         return this@containerShare
             .let {
                 if(TransitionConfig.useFade) {
@@ -57,9 +59,15 @@ fun Modifier.containerShare(
                     )
                 }
             }
-            .let { if(isAnimating) it.clip(roundShape) else it }
+            .let {
+                if(isAnimating)
+                    it.clip(roundShape)
+                else
+                    it
+            }
     }
 }
+
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -86,12 +94,8 @@ fun Modifier.singleElementShare(
 // 标题共享元素
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun Modifier.iconElementShare(
-    route : String,
-) : Modifier = singleElementShare("icon",route)
+fun Modifier.iconElementShare(route : String, ) : Modifier = singleElementShare("icon",route)
 // 图标共享元素
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun Modifier.titleElementShare(
-    route : String,
-) : Modifier = singleElementShare("title",route)
+fun Modifier.titleElementShare(route : String, ) : Modifier = singleElementShare("title",route)
