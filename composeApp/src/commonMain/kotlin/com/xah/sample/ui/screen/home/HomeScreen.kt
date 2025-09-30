@@ -29,7 +29,6 @@ import com.xah.sample.ui.screen.home.screen.RSampleScreen
 import com.xah.sample.ui.screen.home.screen.SingleColumnSampleScreen
 import com.xah.sample.ui.screen.home.screen.TwoColumnSampleScreen
 import com.xah.sample.ui.util.MyAnimationManager
-import com.xah.sample.viewmodel.UIViewModel
 import com.xah.transition.style.transitionBackground
 import com.xah.transition.util.navigateAndSaveForTransition
 import org.jetbrains.compose.resources.painterResource
