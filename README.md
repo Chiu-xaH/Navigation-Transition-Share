@@ -17,10 +17,7 @@ Wasm(JS)、Desktop(JVM)、iOS、Android
 ./gradlew jsBrowserDistribution # Js打包
 ```
 
-## 计划
-开启增强动画时的流畅度优化、打开动画因Navigation而差异的优化、继续优化封装成库...
-
-### 演示
+## 演示
 ![截图](/src/shot.jpg)
 
 - 单个连续打断动画
@@ -31,15 +28,15 @@ https://github.com/user-attachments/assets/51bc9241-05bc-4c90-b066-ccab3024d21c
 
 https://github.com/user-attachments/assets/7f506d51-026e-429a-b8b1-778908eac16c
 
-- 全场景打断动画
-
-https://github.com/user-attachments/assets/5eca9ee9-7c40-4199-b082-3697d8109140
-
 - 正常开闭动画
 
 https://github.com/user-attachments/assets/ba3f9f38-00fb-41fc-8e40-dde1b3caa837
 
+- 全场景打断动画
 
-### Import 模块 :transition
+https://github.com/user-attachments/assets/5eca9ee9-7c40-4199-b082-3697d8109140
+
+## 食用
+Import 模块 :transition
+
 [具体使用案例](https://github.com/Chiu-xaH/HFUT-Schedule)
-
