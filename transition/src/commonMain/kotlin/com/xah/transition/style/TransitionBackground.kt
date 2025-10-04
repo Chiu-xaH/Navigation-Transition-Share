@@ -35,7 +35,10 @@ fun Modifier.transitionDefaultBackground(
 
     val backgroundColor by animateFloatAsState(
         targetValue = if(isExpanded) {
-            backgroundDark
+            if(level == TransitionLevel.HIGH)
+                backgroundDark*2/3
+            else
+                backgroundDark
         } else 0f,
         animationSpec = tween(speed, easing = FastOutSlowInEasing),
     )
@@ -59,7 +62,7 @@ fun Modifier.transitionDefaultBackground(
         targetValue = if (isExpanded) {
             scale
         } else 1f,
-        animationSpec = tween(speed*4/3, easing = FastOutSlowInEasing)
+        animationSpec = tween(speed*7/5, easing = FastOutSlowInEasing)
     )
     //👍 MEDIUM
     if(level == TransitionLevel.MEDIUM) {
@@ -72,7 +75,7 @@ fun Modifier.transitionDefaultBackground(
             blurRadius
         } else 0.dp,
         label = "",
-        animationSpec = tween(speed*7/5, easing = FastOutSlowInEasing)
+        animationSpec = tween(speed*6/5, easing = FastOutSlowInEasing)
     )
 
     //👍 HIGH
