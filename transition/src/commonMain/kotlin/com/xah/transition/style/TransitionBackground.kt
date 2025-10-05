@@ -5,13 +5,13 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.xah.transition.state.TransitionConfig
@@ -45,9 +45,11 @@ fun Modifier.transitionDefaultBackground(
     // 蒙版 遮罩
     val darkModifier = this@transitionDefaultBackground.let {
         if(!transplantBackground && level.code >= TransitionLevel.LOW.code) {
-            it.drawWithContent {
-                drawContent()
-                drawRect(Color.Black.copy(alpha = backgroundColor))
+            it.drawWithCache {
+                onDrawWithContent {
+                    drawContent()
+                    drawRect(Color.Black.copy(alpha = backgroundColor))
+                }
             }
         } else it
     }
@@ -66,7 +68,10 @@ fun Modifier.transitionDefaultBackground(
     )
     //👍 MEDIUM
     if(level == TransitionLevel.MEDIUM) {
-        return darkModifier.scale(scale.value)
+        return darkModifier.graphicsLayer {
+            scaleX = scale.value
+            scaleY = scale.value
+        }
     }
 
     // 稍微晚于运动结束
@@ -79,7 +84,10 @@ fun Modifier.transitionDefaultBackground(
     )
 
     //👍 HIGH
-    return darkModifier.blur(blurSize).scale(scale.value)
+    return darkModifier.blurEffect(blurSize).graphicsLayer {
+        scaleX = scale.value
+        scaleY = scale.value
+    }
 }
 
 
@@ -97,3 +105,7 @@ fun Modifier.transitionSkip(
     }
     return background
 }
+
+
+@Composable
+expect fun Modifier.blurEffect(radius: Dp): Modifier
