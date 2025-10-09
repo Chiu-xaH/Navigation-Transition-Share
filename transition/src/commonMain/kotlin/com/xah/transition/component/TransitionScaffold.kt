@@ -46,7 +46,7 @@ suspend fun SharedTransitionScope.awaitTransition() {
 }
 
 
-fun restoreTransition() {
+private fun restoreTransition() {
     if(TransitionConfig.firstUse) {
         TransitionConfig.firstUse = false
     }
@@ -141,11 +141,7 @@ fun TransitionScaffold(
 
     Scaffold(
         containerColor =  targetColor,
-        modifier = modifier
-            .let {
-                if(enablePredictive) it.scale(scale) else it
-            }
-        ,
+        modifier = modifier.scale(scale),
         topBar = topBar,
         bottomBar = {
             AnimatedVisibility(
