@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sharednav.common.modifier.touchEvent
 import com.sharednav.common.util.LogUtil
@@ -213,6 +214,7 @@ private fun NavHost(
                 onDispose {
                     // 界面销毁，一般不需要提供给开发者，开发者自己在自己的页面就可以监听，这里只给个日志供调试
                     LogUtil.debug("viewDestroy: $entry; stack=${navController.stack.joinToString(",")}")
+                    entry.needAwaitFrame = true
                 }
             }
 
@@ -284,6 +286,9 @@ private fun NavHost(
                 SharedContent(
                     key = entry.destination.key,
                     modifier = Modifier
+                        .onGloballyPositioned {
+                            entry.needAwaitFrame = false
+                        }
                         .let {
                             // 容器等帧测量时，禁用所有动效，测量容器的真实位置
                             if (transitionEntry != null) {

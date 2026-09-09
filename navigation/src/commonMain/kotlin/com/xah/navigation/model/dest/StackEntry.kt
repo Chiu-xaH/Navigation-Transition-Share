@@ -9,10 +9,13 @@ class StackEntry(
     /**
      * 要求前一个页面保留UI不被销毁，仅enableKeepAlive=false时生效
      */
-    var keepPreviousAlive : Boolean
+    var keepPreviousAlive : Boolean,
 ) {
     var id : String = initId()
         private set
+
+    var needAwaitFrame : Boolean = true
+        internal set
 
     fun resetState() {
         id = initId()

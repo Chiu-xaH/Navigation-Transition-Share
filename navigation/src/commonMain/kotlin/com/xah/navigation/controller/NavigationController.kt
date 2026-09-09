@@ -11,9 +11,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.geometry.Offset
-import com.sharednav.common.manager.AnimationSpecManager
 import com.sharednav.common.helper.EnableHelper
+import com.sharednav.common.manager.AnimationSpecManager
 import com.sharednav.common.util.LogUtil
 import com.sharednav.common.util.PredictiveUtil
 import com.xah.container.controller.SharedRegistry
@@ -354,7 +355,9 @@ class NavigationController(
         }
 
         // 设置标志位，开始动画
-        isTransitioning = true
+        waitFrame(transitionEntry!!) {
+            isTransitioning = true
+        }
         transitionProgress.animateTo(targetValue = target, animationSpec = getAnimation())
 
         // 移除栈，置状态
@@ -694,6 +697,27 @@ class NavigationController(
         isTransitioning = false
     }
 
+    /**
+     * 流畅度优化
+     */
+    private suspend fun waitFrame(
+        entry: TransitionEntry,
+        onSwap: () -> Unit,
+    ) {
+        var frameCount = 0
+        // 一定要确保页面切换(onSwap)之后马上等帧(awaitFrame)
+        onSwap()
+        LogUtil.debug("${entry.type.name} to ${entry.to.destination.key} needAwaitFrame: ${entry.to.needAwaitFrame}")
+        while (true) {
+            if(!entry.to.needAwaitFrame) {
+                LogUtil.debug("${entry.type.name} : waiting for $frameCount frame")
+                return
+            }
+            withFrameNanos { }
+            frameCount++
+            // 不需要最大等帧限制，理论上走不到
+        }
+    }
 
     init {
         if(_stack.isEmpty()) {
